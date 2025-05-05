@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+
+{% block title %}Shop - PayRing NFC Kits{% endblock %}
+
+{% block content %}
+<!-- Shop Header -->
+<section class="shop-header py-5 bg-light">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-4">Shop PayRing Kits</h1>
+        <p class="lead">Browse our selection of DIY NFC ring kits and choose the perfect one for your needs.</p>
+    </div>
+</section>
+
+<!-- Products Grid -->
+<section class="products-section py-5">
+    <div class="container">
+        <!-- Products heading -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h2>Available Kits</h2>
+                <p class="text-muted">Select a kit to view details and customize your order</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-secondary view-grid active">
+                        <i class="fas fa-th-large"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary view-list">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Products grid -->
+        <div class="row g-4 products-grid">
+            {% for kit in kits %}
+            <div class="col-md-4">
+                <div class="card h-100 product-card">
+                    <div class="position-relative">
+                        <img src="{{ kit.image_url or url_for('static', filename='images/kit-placeholder.jpg') }}" class="card-img-top" alt="{{ kit.name }}">
+                        <span class="badge bg-primary position-absolute top-0 end-0 m-3">{{ kit.name }}</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="h5 card-title">{{ kit.name }} Kit</h3>
+                        <p class="card-text">{{ kit.description[:120] }}{% if kit.description|length > 120 %}...{% endif %}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="h4 mb-0">${{ "%.2f"|format(kit.price) }}</span>
+                            <a href="{{ url_for('shop.kit_detail', kit_id=kit.id) }}" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Products list (hidden by default) -->
+        <div class="products-list d-none">
+            {% for kit in kits %}
+            <div class="card mb-3 product-list-item">
+                <div class="row g-0">
+                    <div class="col-md-3">
+                        <img src="{{ kit.image_url or url_for('static', filename='images/kit-placeholder.jpg') }}" class="img-fluid rounded-start h-100 object-fit-cover" alt="{{ kit.name }}">
+                    </div>
+                    <div class="col-md-9">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h3 class="h5 card-title">{{ kit.name }} Kit</h3>
+                                <span class="badge bg-primary">{{ kit.name }}</span>
+                            </div>
+                            <p class="card-text">{{ kit.description }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="h4 mb-0">${{ "%.2f"|format(kit.price) }}</span>
+                                <a href="{{ url_for('shop.kit_detail', kit_id=kit.id) }}" class="btn btn-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Benefits Section -->
+<section class="benefits-section py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="h3 fw-bold">Why Choose PayRing Kits?</h2>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="feature-icon bg-primary text-white rounded-circle mb-3 mx-auto">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3 class="h5">Easy to Assemble</h3>
+                    <p>Simple instructions make building your ring a breeze</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="feature-icon bg-primary text-white rounded-circle mb-3 mx-auto">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3 class="h5">Customizable</h3>
+                    <p>Choose your ring type and size for the perfect fit</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="feature-icon bg-primary text-white rounded-circle mb-3 mx-auto">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="h5">High Quality</h3>
+                    <p>Premium materials ensure durability and performance</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="feature-icon bg-primary text-white rounded-circle mb-3 mx-auto">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3 class="h5">Support Included</h3>
+                    <p>Get help with assembly and configuration if needed</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="h3 fw-bold">Frequently Asked Questions</h2>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="accordion" id="shopFAQ">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                Which kit should I choose?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#shopFAQ">
+                            <div class="accordion-body">
+                                <p>Choose based on your needs:</p>
+                                <ul>
+                                    <li><strong>InfoRing</strong> - Perfect for sharing contact info or website links with a simple tap</li>
+                                    <li><strong>AccessRing</strong> - Ideal for building access, device unlocking or other access control needs</li>
+                                    <li><strong>PayRing</strong> - Best for those who want to make contactless payments with a wave of their hand</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                How difficult is it to assemble a PayRing kit?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#shopFAQ">
+                            <div class="accordion-body">
+                                <p>All our kits are designed to be assembled by anyone, even without technical experience. Each kit includes detailed step-by-step instructions with images. The InfoRing and AccessRing are simpler to assemble (15-20 minutes), while the PayRing requires a bit more patience and precision (30-45 minutes).</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                What phones are compatible with NFC rings?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#shopFAQ">
+                            <div class="accordion-body">
+                                <p>Most modern smartphones have NFC capabilities built-in:</p>
+                                <ul>
+                                    <li>iPhone: iPhone 6 and newer support NFC (though iPhone's NFC is more limited than Android)</li>
+                                    <li>Android: Most Android phones from the last 5 years have full NFC support</li>
+                                </ul>
+                                <p>For payments (PayRing), make sure your phone supports mobile payment systems like Google Pay or Apple Pay.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                How long does shipping take?
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#shopFAQ">
+                            <div class="accordion-body">
+                                <p>Standard shipping typically takes 3-5 business days within the continental US. International shipping times vary by location, but generally take 7-14 business days. Expedited shipping options are available at checkout.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Toggle between grid and list views
+    document.addEventListener('DOMContentLoaded', function() {
+        const gridBtn = document.querySelector('.view-grid');
+        const listBtn = document.querySelector('.view-list');
+        const productsGrid = document.querySelector('.products-grid');
+        const productsList = document.querySelector('.products-list');
+        
+        gridBtn.addEventListener('click', function() {
+            productsGrid.classList.remove('d-none');
+            productsList.classList.add('d-none');
+            gridBtn.classList.add('active');
+            listBtn.classList.remove('active');
+        });
+        
+        listBtn.addEventListener('click', function() {
+            productsGrid.classList.add('d-none');
+            productsList.classList.remove('d-none');
+            gridBtn.classList.remove('active');
+            listBtn.classList.add('active');
+        });
+    });
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+    
+    .bg-primary {
+        background-color: #4a6bef !important;
+    }
+    
+    .btn-primary {
+        background-color: #4a6bef;
+        border-color: #4a6bef;
+    }
+    
+    .btn-primary:hover {
+        background-color: #3a59cb;
+        border-color: #3a59cb;
+    }
+</style>
+{% endblock %}

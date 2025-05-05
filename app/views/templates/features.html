@@ -1,0 +1,404 @@
+{% extends 'base.html' %}
+
+{% block title %}Features - PayRing NFC Kits{% endblock %}
+
+{% block content %}
+<!-- Features Header -->
+<section class="features-header py-5 bg-light">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-4">PayRing Features</h1>
+        <p class="lead">Discover all the amazing features and capabilities of our DIY NFC ring kits.</p>
+    </div>
+</section>
+
+<!-- Main Features Section -->
+<section class="main-features-section py-5">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-6">
+                <h2 class="mb-4">Why Choose PayRing?</h2>
+                <div class="feature-item d-flex mb-4">
+                    <div class="feature-icon bg-primary text-white rounded-circle me-3">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div>
+                        <h3 class="h5">DIY Experience</h3>
+                        <p>Create your own wearable technology with our easy-to-follow kits. No special skills required!</p>
+                    </div>
+                </div>
+                <div class="feature-item d-flex mb-4">
+                    <div class="feature-icon bg-primary text-white rounded-circle me-3">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div>
+                        <h3 class="h5">Fully Customizable</h3>
+                        <p>Choose your kit type, ring style, and size for a truly personalized experience.</p>
+                    </div>
+                </div>
+                <div class="feature-item d-flex mb-4">
+                    <div class="feature-icon bg-primary text-white rounded-circle me-3">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div>
+                        <h3 class="h5">Durable & Secure</h3>
+                        <p>Our rings are water-resistant, durable, and designed for everyday use with secure technology.</p>
+                    </div>
+                </div>
+                <div class="feature-item d-flex">
+                    <div class="feature-icon bg-primary text-white rounded-circle me-3">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div>
+                        <h3 class="h5">Customer Support</h3>
+                        <p>Get comprehensive assembly guides and dedicated support throughout your journey.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <img src="{{ url_for('static', filename='images/features-main.jpg') }}" alt="PayRing Features" class="img-fluid rounded shadow-lg">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Kit Comparison Section -->
+<section class="kit-comparison-section py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Kit Comparison</h2>
+        
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-primary">
+                    <tr>
+                        <th scope="col">Features</th>
+                        <th scope="col">InfoRing</th>
+                        <th scope="col">AccessRing</th>
+                        <th scope="col">PayRing</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">NFC Technology</th>
+                        <td><i class="fas fa-check text-success"></i></td>
+                        <td><i class="fas fa-check text-success"></i></td>
+                        <td><i class="fas fa-check text-success"></i></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Share Contact Info</th>
+                        <td><i class="fas fa-check text-success"></i></td>
+                        <td><i class="fas fa-times text-danger"></i></td>
+                        <td><i class="fas fa-times text-danger"></i></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Access Control</th>
+                        <td><i class="fas fa-times text-danger"></i></td>
+                        <td><i class="fas fa-check text-success"></i></td>
+                        <td><i class="fas fa-times text-danger"></i></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Contactless Payment</th>
+                        <td><i class="fas fa-times text-danger"></i></td>
+                        <td><i class="fas fa-times text-danger"></i></td>
+                        <td><i class="fas fa-check text-success"></i></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">ESP32 Module</th>
+                        <td><i class="fas fa-times text-danger"></i></td>
+                        <td><i class="fas fa-check text-success"></i></td>
+                        <td><i class="fas fa-times text-danger"></i></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Platform Access</th>
+                        <td><i class="fas fa-check text-success"></i></td>
+                        <td><i class="fas fa-times text-danger"></i></td>
+                        <td><i class="fas fa-times text-danger"></i></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Difficulty Level</th>
+                        <td>Beginner</td>
+                        <td>Intermediate</td>
+                        <td>Advanced</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Assembly Time</th>
+                        <td>15-20 min</td>
+                        <td>20-25 min</td>
+                        <td>30-45 min</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="how-it-works-section py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">How It Works</h2>
+        
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="step-number bg-primary text-white rounded-circle mb-3 mx-auto">1</div>
+                        <h3 class="h5 card-title">Choose Your Kit</h3>
+                        <p class="card-text">Select the kit that matches your needs: InfoRing, AccessRing, or PayRing.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="step-number bg-primary text-white rounded-circle mb-3 mx-auto">2</div>
+                        <h3 class="h5 card-title">Build Your Ring</h3>
+                        <p class="card-text">Follow our simple instructions to assemble your custom NFC ring.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="step-number bg-primary text-white rounded-circle mb-3 mx-auto">3</div>
+                        <h3 class="h5 card-title">Configure</h3>
+                        <p class="card-text">Program your ring with your desired functionality using our guides.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="step-number bg-primary text-white rounded-circle mb-3 mx-auto">4</div>
+                        <h3 class="h5 card-title">Enjoy!</h3>
+                        <p class="card-text">Experience the convenience of your new NFC ring technology.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Kit Details Section -->
+<section class="kit-details-section py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Kit Details</h2>
+        
+        <div class="row g-5">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="h4 mb-0">InfoRing</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="h5 mb-3">What's Included:</h4>
+                        <ul class="mb-4">
+                            <li>NFC ring components with static link</li>
+                            <li>Platform access card with QR code, login and password</li>
+                            <li>Assembly tools and materials</li>
+                            <li>Step-by-step instructions</li>
+                        </ul>
+                        <h4 class="h5 mb-3">Primary Use Cases:</h4>
+                        <ul>
+                            <li>Sharing contact information</li>
+                            <li>Linking to social media profiles</li>
+                            <li>Sharing website URLs</li>
+                            <li>Event check-ins</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="h4 mb-0">AccessRing</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="h5 mb-3">What's Included:</h4>
+                        <ul class="mb-4">
+                            <li>NFC ring components compatible with access systems</li>
+                            <li>ESP32 module pre-programmed for data transfer</li>
+                            <li>Assembly tools and materials</li>
+                            <li>Step-by-step instructions</li>
+                        </ul>
+                        <h4 class="h5 mb-3">Primary Use Cases:</h4>
+                        <ul>
+                            <li>Building access control</li>
+                            <li>Office security systems</li>
+                            <li>Car/home door unlocking</li>
+                            <li>Computer login authentication</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="h4 mb-0">PayRing</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="h5 mb-3">What's Included:</h4>
+                        <ul class="mb-4">
+                            <li>3D printed ring with secure chip compartment</li>
+                            <li>Acetone for extracting chip from credit card</li>
+                            <li>Epoxy resin for sealing and waterproofing</li>
+                            <li>Precision tools and step-by-step instructions</li>
+                        </ul>
+                        <h4 class="h5 mb-3">Primary Use Cases:</h4>
+                        <ul>
+                            <li>Contactless payments</li>
+                            <li>Public transit access</li>
+                            <li>Loyalty program integration</li>
+                            <li>Quick identity verification</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Frequently Asked Questions</h2>
+        
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                Which phones are compatible with NFC rings?
+                            </button>
+                        </h3>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>Most modern smartphones have NFC capabilities built-in:</p>
+                                <ul>
+                                    <li>iPhone: iPhone 6 and newer support NFC (though iPhone's NFC is more limited than Android)</li>
+                                    <li>Android: Most Android phones from the last 5 years have full NFC support</li>
+                                </ul>
+                                <p>For payments (PayRing), make sure your phone supports mobile payment systems like Google Pay or Apple Pay.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                How difficult is it to assemble a PayRing kit?
+                            </button>
+                        </h3>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>All our kits are designed to be assembled by anyone, even without technical experience. Each kit includes detailed step-by-step instructions with images. The InfoRing and AccessRing are simpler to assemble (15-20 minutes), while the PayRing requires a bit more patience and precision (30-45 minutes).</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                Are PayRing kits water-resistant?
+                            </button>
+                        </h3>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>Yes, when properly assembled according to our instructions, all PayRing kits are water-resistant (IP67 rated), which means they can withstand immersion in water up to 1 meter for up to 30 minutes. This makes them suitable for everyday activities like handwashing, showering, and swimming in shallow water.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                How secure is the payment technology in PayRing?
+                            </button>
+                        </h3>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>The PayRing utilizes the same secure NFC payment chip that's in your credit card. It includes all the security features of modern contactless payment cards, including:</p>
+                                <ul>
+                                    <li>Encrypted communication</li>
+                                    <li>Tokenization (your actual card number is never transmitted)</li>
+                                    <li>Transaction limits for contactless payments without PIN</li>
+                                </ul>
+                                <p>Remember that using PayRing is subject to the same terms and conditions as using your physical credit card.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                Can I change the functionality of my ring after assembly?
+                            </button>
+                        </h3>
+                        <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>It depends on the kit type:</p>
+                                <ul>
+                                    <li><strong>InfoRing:</strong> Yes, you can change the linked URL at any time through our platform.</li>
+                                    <li><strong>AccessRing:</strong> Yes, you can reprogram it using the included ESP32 module to copy data from a different access card.</li>
+                                    <li><strong>PayRing:</strong> No, once assembled, the payment functionality is permanently tied to the specific credit card chip used.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 text-lg-start text-center">
+                <h2 class="display-5 fw-bold mb-3">Ready to experience the future?</h2>
+                <p class="lead mb-lg-0">Get your own DIY NFC ring kit today and join the wearable technology revolution.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end text-center">
+                <a href="{{ url_for('shop.shop_index') }}" class="btn btn-light btn-lg">Shop Now</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+    
+    .step-number {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    
+    .bg-primary {
+        background-color: #4a6bef !important;
+    }
+    
+    .btn-primary {
+        background-color: #4a6bef;
+        border-color: #4a6bef;
+    }
+    
+    .btn-primary:hover {
+        background-color: #3a59cb;
+        border-color: #3a59cb;
+    }
+    
+    .table-primary {
+        background-color: rgba(74, 107, 239, 0.1);
+    }
+</style>
+{% endblock %}

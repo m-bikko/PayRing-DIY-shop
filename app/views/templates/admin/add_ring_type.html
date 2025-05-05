@@ -1,0 +1,54 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Add Ring Type - PayRing Admin{% endblock %}
+
+{% block header %}Add New Ring Type{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Ring Type Details</h5>
+                <a href="{{ url_for('admin.ring_types') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Back to Ring Types
+                </a>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('admin.add_ring_type') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Ring Type Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                        <div class="form-text">Enter a unique name for this ring type (e.g., Metal, Silicone, Wooden)</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="image_url" class="form-label">Image URL</label>
+                        <input type="url" class="form-control" id="image_url" name="image_url">
+                        <div class="form-text">Enter a URL for the ring type image (optional)</div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                        <a href="{{ url_for('admin.ring_types') }}" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Create Ring Type</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .btn-primary {
+        background-color: #4a6bef;
+        border-color: #4a6bef;
+    }
+    
+    .btn-primary:hover {
+        background-color: #3a59cb;
+        border-color: #3a59cb;
+    }
+</style>
+{% endblock %}

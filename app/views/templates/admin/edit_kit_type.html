@@ -1,0 +1,116 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Edit Kit Type - PayRing Admin{% endblock %}
+
+{% block header %}Edit Kit Type{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Edit Kit Type: {{ kit.name }}</h5>
+                <a href="{{ url_for('admin.kit_types') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Back to Kit Types
+                </a>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('admin.edit_kit_type', kit_id=kit.id) }}" method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Kit Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ kit.name }}" required>
+                        <div class="form-text">Enter a unique name for this kit type (e.g., InfoRing, AccessRing, PayRing)</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="4" required>{{ kit.description }}</textarea>
+                        <div class="form-text">Provide a detailed description of what this kit includes and its purpose</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price ($)</label>
+                        <input type="number" class="form-control" id="price" name="price" step="0.01" min="0" value="{{ kit.price }}" required>
+                        <div class="form-text">Set the base price for this kit type (e.g., 49.99)</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="image_url" class="form-label">Image URL</label>
+                        <input type="url" class="form-control" id="image_url" name="image_url" value="{{ kit.image_url or '' }}">
+                        <div class="form-text">Enter a URL for the kit image (optional)</div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h6>Preview</h6>
+                        <div class="card" style="max-width: 300px;">
+                            <img src="{{ kit.image_url or url_for('static', filename='images/kit-placeholder.jpg') }}" 
+                                 class="card-img-top" alt="{{ kit.name }}" id="image-preview">
+                            <div class="card-body">
+                                <h5 class="card-title" id="name-preview">{{ kit.name }}</h5>
+                                <p class="card-text" id="price-preview">${{ "%.2f"|format(kit.price) }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('admin.kit_types') }}" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Update Kit Type</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Live preview for name and price changes
+        const nameInput = document.getElementById('name');
+        const priceInput = document.getElementById('price');
+        const imageUrlInput = document.getElementById('image_url');
+        
+        const namePreview = document.getElementById('name-preview');
+        const pricePreview = document.getElementById('price-preview');
+        const imagePreview = document.getElementById('image-preview');
+        
+        nameInput.addEventListener('input', function() {
+            namePreview.textContent = this.value;
+        });
+        
+        priceInput.addEventListener('input', function() {
+            const price = parseFloat(this.value) || 0;
+            pricePreview.textContent = '$' + price.toFixed(2);
+        });
+        
+        imageUrlInput.addEventListener('input', function() {
+            if (this.value) {
+                imagePreview.src = this.value;
+            } else {
+                imagePreview.src = "{{ url_for('static', filename='images/kit-placeholder.jpg') }}";
+            }
+        });
+        
+        // Handle image load errors
+        imagePreview.addEventListener('error', function() {
+            this.src = "{{ url_for('static', filename='images/kit-placeholder.jpg') }}";
+            alert('Invalid image URL. Please check the URL and try again.');
+        });
+    });
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .btn-primary {
+        background-color: #4a6bef;
+        border-color: #4a6bef;
+    }
+    
+    .btn-primary:hover {
+        background-color: #3a59cb;
+        border-color: #3a59cb;
+    }
+</style>
+{% endblock %}

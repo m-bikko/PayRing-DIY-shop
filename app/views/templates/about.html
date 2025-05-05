@@ -1,0 +1,367 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us - PayRing NFC Kits{% endblock %}
+
+{% block content %}
+<!-- About Header -->
+<section class="about-header py-5 bg-light">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-4">About PayRing</h1>
+        <p class="lead">We're revolutionizing wearable technology with our DIY NFC ring kits.</p>
+    </div>
+</section>
+
+<!-- Our Story Section -->
+<section class="our-story-section py-5">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <h2 class="mb-4">Our Story</h2>
+                <p>PayRing was founded in 2022 by a group of technology enthusiasts who believed that wearable tech should be accessible to everyone. We were frustrated by the high costs and limited customization of existing NFC wearables on the market.</p>
+                <p>Instead of just complaining, we decided to take matters into our own hands. After months of research, development, and testing, we created our first DIY kit - the InfoRing. The response was overwhelming, and we quickly expanded to include AccessRing and PayRing kits.</p>
+                <p>Today, PayRing is a leading provider of DIY NFC wearables, helping thousands of users around the world to create personalized technology solutions that fit their unique needs and style.</p>
+            </div>
+            <div class="col-lg-6">
+                <img src="{{ url_for('static', filename='images/about-story.jpg') }}" alt="PayRing Founder" class="img-fluid rounded shadow-lg">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Mission Section -->
+<section class="our-mission-section py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6 order-lg-2">
+                <h2 class="mb-4">Our Mission</h2>
+                <p class="mb-4">At PayRing, our mission is to democratize wearable technology by providing high-quality, affordable DIY kits that empower users to create custom NFC rings tailored to their specific needs.</p>
+                <div class="d-flex mb-3">
+                    <div class="me-3">
+                        <i class="fas fa-check-circle text-primary fa-2x"></i>
+                    </div>
+                    <div>
+                        <h3 class="h5">Accessibility</h3>
+                        <p>We believe everyone should have access to wearable technology, regardless of technical expertise.</p>
+                    </div>
+                </div>
+                <div class="d-flex mb-3">
+                    <div class="me-3">
+                        <i class="fas fa-check-circle text-primary fa-2x"></i>
+                    </div>
+                    <div>
+                        <h3 class="h5">Education</h3>
+                        <p>We're committed to teaching people about NFC technology and its practical applications.</p>
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <div class="me-3">
+                        <i class="fas fa-check-circle text-primary fa-2x"></i>
+                    </div>
+                    <div>
+                        <h3 class="h5">Innovation</h3>
+                        <p>We continuously improve our kits based on customer feedback and technological advancements.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 order-lg-1">
+                <img src="{{ url_for('static', filename='images/about-mission.jpg') }}" alt="PayRing Mission" class="img-fluid rounded shadow-lg">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Team Section -->
+<section class="our-team-section py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Meet Our Team</h2>
+        
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="card h-100 team-card">
+                    <img src="{{ url_for('static', filename='images/team-1.jpg') }}" class="card-img-top" alt="Team Member">
+                    <div class="card-body text-center">
+                        <h3 class="h5 card-title">Alex Rodriguez</h3>
+                        <p class="card-text text-muted mb-3">Founder & CEO</p>
+                        <p class="card-text">Hardware engineer with a passion for wearable technology and DIY electronics.</p>
+                        <div class="social-icons">
+                            <a href="#" class="text-primary me-2"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-primary me-2"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 team-card">
+                    <img src="{{ url_for('static', filename='images/team-2.jpg') }}" class="card-img-top" alt="Team Member">
+                    <div class="card-body text-center">
+                        <h3 class="h5 card-title">Sophia Chen</h3>
+                        <p class="card-text text-muted mb-3">CTO</p>
+                        <p class="card-text">Software developer specializing in NFC technology and embedded systems.</p>
+                        <div class="social-icons">
+                            <a href="#" class="text-primary me-2"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-primary me-2"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 team-card">
+                    <img src="{{ url_for('static', filename='images/team-3.jpg') }}" class="card-img-top" alt="Team Member">
+                    <div class="card-body text-center">
+                        <h3 class="h5 card-title">Marcus Johnson</h3>
+                        <p class="card-text text-muted mb-3">Design Director</p>
+                        <p class="card-text">Industrial designer with experience in creating ergonomic wearable devices.</p>
+                        <div class="social-icons">
+                            <a href="#" class="text-primary me-2"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-primary me-2"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 team-card">
+                    <img src="{{ url_for('static', filename='images/team-4.jpg') }}" class="card-img-top" alt="Team Member">
+                    <div class="card-body text-center">
+                        <h3 class="h5 card-title">Janna Patel</h3>
+                        <p class="card-text text-muted mb-3">Customer Experience</p>
+                        <p class="card-text">Dedicated to ensuring every customer has an amazing experience with our kits.</p>
+                        <div class="social-icons">
+                            <a href="#" class="text-primary me-2"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-primary me-2"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Milestones Section -->
+<section class="milestones-section py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Our Journey</h2>
+        
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-year">2022</div>
+                    <h3 class="h5">Company Founded</h3>
+                    <p>PayRing was established with a mission to make wearable NFC technology accessible to everyone.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-year">2022</div>
+                    <h3 class="h5">First InfoRing Kit</h3>
+                    <p>Released our first DIY kit enabling users to share contact information and URLs with a tap.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-year">2023</div>
+                    <h3 class="h5">AccessRing Launch</h3>
+                    <p>Expanded our product line with the AccessRing kit for secure building and device access.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-year">2023</div>
+                    <h3 class="h5">10,000 Users</h3>
+                    <p>Reached 10,000 happy customers using our DIY kits worldwide.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-year">2024</div>
+                    <h3 class="h5">PayRing Launch</h3>
+                    <p>Introduced our most advanced kit, allowing users to create contactless payment rings.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-year">2025</div>
+                    <h3 class="h5">International Expansion</h3>
+                    <p>Now shipping to over 50 countries with localized support and documentation.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Values Section -->
+<section class="values-section py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Our Core Values</h2>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="value-icon bg-primary text-white rounded-circle mb-3 mx-auto">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="h4 card-title">Community</h3>
+                        <p class="card-text">We believe in building a community of makers, creators, and innovators who share knowledge and inspiration.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="value-icon bg-primary text-white rounded-circle mb-3 mx-auto">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3 class="h4 card-title">Innovation</h3>
+                        <p class="card-text">We're constantly pushing the boundaries of what's possible with NFC technology and DIY wearables.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="value-icon bg-primary text-white rounded-circle mb-3 mx-auto">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h3 class="h4 card-title">Sustainability</h3>
+                        <p class="card-text">We're committed to minimizing our environmental footprint through responsible sourcing and packaging.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 text-lg-start text-center">
+                <h2 class="display-5 fw-bold mb-3">Join the PayRing Community</h2>
+                <p class="lead mb-lg-0">Get your own DIY NFC ring kit today and become part of our growing community.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end text-center">
+                <a href="{{ url_for('shop.shop_index') }}" class="btn btn-light btn-lg">Shop Now</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .timeline {
+        position: relative;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 0;
+    }
+    
+    .timeline::before {
+        content: '';
+        position: absolute;
+        width: 2px;
+        background-color: #4a6bef;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        margin-left: -1px;
+    }
+    
+    .timeline-item {
+        padding: 10px 40px;
+        position: relative;
+        width: 50%;
+        box-sizing: border-box;
+        left: 0;
+        margin-bottom: 30px;
+    }
+    
+    .timeline-item:nth-child(even) {
+        left: 50%;
+    }
+    
+    .timeline-item::after {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        right: -10px;
+        background-color: white;
+        border: 2px solid #4a6bef;
+        top: 15px;
+        border-radius: 50%;
+        z-index: 1;
+    }
+    
+    .timeline-item:nth-child(even)::after {
+        left: -10px;
+    }
+    
+    .timeline-content {
+        padding: 20px;
+        background-color: white;
+        position: relative;
+        border-radius: 6px;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    
+    .timeline-year {
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background-color: #4a6bef;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+    
+    .team-card img {
+        height: 250px;
+        object-fit: cover;
+    }
+    
+    .value-icon {
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+    }
+    
+    .bg-primary {
+        background-color: #4a6bef !important;
+    }
+    
+    .text-primary {
+        color: #4a6bef !important;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 767.98px) {
+        .timeline::before {
+            left: 40px;
+        }
+        
+        .timeline-item {
+            width: 100%;
+            padding-left: 80px;
+            padding-right: 20px;
+        }
+        
+        .timeline-item:nth-child(even) {
+            left: 0;
+        }
+        
+        .timeline-item::after {
+            left: 30px;
+            right: auto;
+        }
+        
+        .timeline-item:nth-child(even)::after {
+            left: 30px;
+        }
+    }
+</style>
+{% endblock %}

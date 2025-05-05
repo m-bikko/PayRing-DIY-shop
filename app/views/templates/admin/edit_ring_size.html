@@ -1,0 +1,110 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Edit Ring Size - PayRing Admin{% endblock %}
+
+{% block header %}Edit Ring Size{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-6 mx-auto">
+        <div class="card shadow">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Edit Ring Size: {{ ring_size.size }}</h5>
+                <a href="{{ url_for('admin.ring_sizes') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Back to Ring Sizes
+                </a>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('admin.edit_ring_size', size_id=ring_size.id) }}" method="POST">
+                    <div class="mb-3">
+                        <label for="size" class="form-label">Ring Size</label>
+                        <input type="text" class="form-control" id="size" name="size" value="{{ ring_size.size }}" required>
+                        <div class="form-text">Enter a ring size (e.g., 5, 6, 7, 8, 9, or US5, US6, etc.)</div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                        <a href="{{ url_for('admin.ring_sizes') }}" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Update Ring Size</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Reference Chart -->
+        <div class="card shadow mt-4">
+            <div class="card-header py-3">
+                <h5 class="mb-0">Ring Size Reference</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped">
+                        <thead>
+                            <tr>
+                                <th>US Size</th>
+                                <th>UK Size</th>
+                                <th>Inside Diameter (mm)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>5</td>
+                                <td>J 1/2</td>
+                                <td>15.7</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>L 1/2</td>
+                                <td>16.5</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>N 1/2</td>
+                                <td>17.3</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>P 1/2</td>
+                                <td>18.1</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td>R 1/2</td>
+                                <td>18.9</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td>T 1/2</td>
+                                <td>19.8</td>
+                            </tr>
+                            <tr>
+                                <td>11</td>
+                                <td>V 1/2</td>
+                                <td>20.6</td>
+                            </tr>
+                            <tr>
+                                <td>12</td>
+                                <td>X 1/2</td>
+                                <td>21.4</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .btn-primary {
+        background-color: #4a6bef;
+        border-color: #4a6bef;
+    }
+    
+    .btn-primary:hover {
+        background-color: #3a59cb;
+        border-color: #3a59cb;
+    }
+</style>
+{% endblock %}

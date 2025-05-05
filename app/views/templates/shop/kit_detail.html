@@ -1,0 +1,1050 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ kit.name }} - PayRing NFC Kit{% endblock %}
+
+{% block content %}
+<!-- Product Detail Section -->
+<section class="product-detail-section py-5">
+    <div class="container">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('shop.shop_index') }}">Shop</a></li>
+                <li class="breadcrumb-item active">{{ kit.name }}</li>
+            </ol>
+        </nav>
+        
+        <div class="row">
+            <!-- Product Images -->
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="product-image-container">
+                    <img src="{{ kit.image_url or url_for('static', filename='images/kit-placeholder.jpg') }}" class="img-fluid rounded shadow product-image" alt="{{ kit.name }}">
+                </div>
+                <div class="row mt-3 g-2 product-thumbnails">
+                    <div class="col-3">
+                        <img src="{{ url_for('static', filename='images/kit-thumb-1.jpg') }}" class="img-fluid rounded thumbnail active" alt="{{ kit.name }} thumbnail 1">
+                    </div>
+                    <div class="col-3">
+                        <img src="{{ url_for('static', filename='images/kit-thumb-2.jpg') }}" class="img-fluid rounded thumbnail" alt="{{ kit.name }} thumbnail 2">
+                    </div>
+                    <div class="col-3">
+                        <img src="{{ url_for('static', filename='images/kit-thumb-3.jpg') }}" class="img-fluid rounded thumbnail" alt="{{ kit.name }} thumbnail 3">
+                    </div>
+                    <div class="col-3">
+                        <img src="{{ url_for('static', filename='images/kit-thumb-4.jpg') }}" class="img-fluid rounded thumbnail" alt="{{ kit.name }} thumbnail 4">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product Info -->
+            <div class="col-lg-6">
+                <h1 class="mb-3">{{ kit.name }} Kit</h1>
+                <div class="mb-3">
+                    <span class="badge bg-success">In Stock</span>
+                    <span class="ms-2">
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star-half-alt text-warning"></i>
+                        <span class="text-muted">(27 reviews)</span>
+                    </span>
+                </div>
+                <h2 class="h3 mb-4 text-primary">${{ "%.2f"|format(kit.price) }}</h2>
+                
+                <div class="product-description mb-4">
+                    <p>{{ kit.description }}</p>
+                </div>
+                
+                <form id="product-form" class="product-form">
+                    <input type="hidden" id="kitTypeId" value="{{ kit.id }}">
+                    
+                    <!-- Ring Type Selection -->
+                    <div class="mb-3">
+                        <label for="ringType" class="form-label">Ring Type:</label>
+                        <select class="form-select" id="ringType" required>
+                            <option value="">Select Ring Type</option>
+                            {% for ring_type in ring_types %}
+                            <option value="{{ ring_type.id }}">{{ ring_type.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Ring Size Selection -->
+                    <div class="mb-3">
+                        <label for="ringSize" class="form-label">Ring Size:</label>
+                        <select class="form-select" id="ringSize" required>
+                            <option value="">Select Ring Size</option>
+                            {% for ring_size in ring_sizes %}
+                            <option value="{{ ring_size.id }}">{{ ring_size.size }}</option>
+                            {% endfor %}
+                        </select>
+                        <small class="form-text text-muted">
+                            <a href="#size-guide" data-bs-toggle="modal" data-bs-target="#sizeGuideModal">
+                                <i class="fas fa-ruler me-1"></i> Size Guide
+                            </a>
+                        </small>
+                    </div>
+                    
+                    <!-- Quantity -->
+                    <div class="mb-4">
+                        <label for="quantity" class="form-label">Quantity:</label>
+                        <div class="input-group quantity-selector">
+                            <button type="button" class="btn btn-outline-secondary quantity-decrease">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input type="number" class="form-control text-center" id="quantity" value="1" min="1" max="10">
+                            <button type="button" class="btn btn-outline-secondary quantity-increase">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Add to Cart Button -->
+                    <div class="d-grid gap-2">
+                        <button type="button" id="add-to-cart" class="btn btn-primary btn-lg">
+                            <i class="fas fa-shopping-cart me-2"></i> Add to Cart
+                        </button>
+                        <button type="button" id="buy-now" class="btn btn-outline-primary btn-lg">
+                            Buy Now
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Features List -->
+                <div class="mt-4">
+                    <h3 class="h5 mb-3">Key Features:</h3>
+                    <ul class="list-unstyled">
+                        {% if kit.name == 'InfoRing' %}
+                        <li><i class="fas fa-check-circle text-success me-2"></i> Share contact info with a simple tap</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i> Link to any website or digital content</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i> Works with most NFC-enabled phones</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i> Includes platform access card with QR code</li>
+                        {% elif kit.name == 'AccessRing' %}
+                        <li><i class="fas fa-check-circle text-success me-2"></i> Use as a secure access card replacement</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i> Includes ESP32 module for programming</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i> Copy data from existing access cards</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i> Compatible with most RFID access systems</li>
+                        {% elif kit.name == 'PayRing' %}
+                        <li><i class="fas fa-check-circle text-success me-2"></i> Make contactless payments with a wave</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i> Includes tools to extract chip from credit card</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i> 3D printed ring with secure chip holder</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i> Epoxy resin for secure, waterproof seal</li>
+                        {% else %}
+                        <li><i class="fas fa-check-circle text-success me-2"></i> DIY NFC ring kit</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i> Easy to assemble</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i> Customizable</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i> Long-lasting durability</li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Product Details Tabs -->
+<section class="product-tabs-section py-5 bg-light">
+    <div class="container">
+        <ul class="nav nav-tabs" id="productTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab">Description</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="specs-tab" data-bs-toggle="tab" data-bs-target="#specs" type="button" role="tab">Specifications</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="assembly-tab" data-bs-toggle="tab" data-bs-target="#assembly" type="button" role="tab">Assembly Guide</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">Reviews</button>
+            </li>
+        </ul>
+        <div class="tab-content p-4 bg-white shadow-sm rounded-bottom" id="productTabsContent">
+            <div class="tab-pane fade show active" id="description" role="tabpanel">
+                {% if kit.name == 'InfoRing' %}
+                <h3>InfoRing - Share Information with a Tap</h3>
+                <p>The InfoRing kit provides you with everything you need to create your own NFC-enabled ring that can instantly share information with any compatible smartphone. Perfect for networking, business cards, or linking to your social media profiles.</p>
+                
+                <p>Each InfoRing kit includes:</p>
+                <ul>
+                    <li>NFC ring components with static link</li>
+                    <li>Platform access card with QR code, login and password</li>
+                    <li>Assembly tools and materials</li>
+                    <li>Step-by-step instructions</li>
+                    <li>Access to our online platform for managing your redirects</li>
+                </ul>
+                
+                <p>Once assembled, simply tap your phone to the ring to share whatever information you've programmed - from contact details to website links. You can change what information is shared at any time through our platform.</p>
+                
+                {% elif kit.name == 'AccessRing' %}
+                <h3>AccessRing - Secure Access Control in a Ring</h3>
+                <p>The AccessRing kit allows you to create a wearable access control device that replaces traditional access cards and key fobs. Ideal for office buildings, apartments, or any RFID access systems.</p>
+                
+                <p>Each AccessRing kit includes:</p>
+                <ul>
+                    <li>NFC ring components compatible with access control systems</li>
+                    <li>ESP32 module pre-programmed for data transfer</li>
+                    <li>Assembly tools and materials</li>
+                    <li>Step-by-step instructions</li>
+                    <li>Software for programming your ring</li>
+                </ul>
+                
+                <p>The included ESP32 module makes it easy to copy data from your existing access cards to your new ring. Once programmed, simply wave your hand near the access reader to gain entry - no more fumbling for cards or keys!</p>
+                
+                {% elif kit.name == 'PayRing' %}
+                <h3>PayRing - Contactless Payments at Your Fingertips</h3>
+                <p>The PayRing kit transforms your credit card into a wearable payment device. Make secure contactless payments with just a wave of your hand at any terminal that accepts contactless payments.</p>
+                
+                <p>Each PayRing kit includes:</p>
+                <ul>
+                    <li>3D printed ring with secure chip compartment</li>
+                    <li>Acetone for extracting chip from credit card</li>
+                    <li>Epoxy resin for sealing and waterproofing</li>
+                    <li>Precision tools for handling small components</li>
+                    <li>Detailed step-by-step instructions</li>
+                </ul>
+                
+                <p>Note: This kit requires an existing chip credit/debit card for harvesting the NFC payment chip. The extraction process does not damage the payment data but will render the original card unusable.</p>
+                
+                {% else %}
+                <h3>{{ kit.name }} Kit</h3>
+                <p>{{ kit.description }}</p>
+                {% endif %}
+            </div>
+            
+            <div class="tab-pane fade" id="specs" role="tabpanel">
+                <h3>Technical Specifications</h3>
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Kit Type</th>
+                            <td>{{ kit.name }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Materials</th>
+                            <td>High-quality epoxy resin, 3D printed components, NFC/RFID technology</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">NFC Frequency</th>
+                            <td>13.56 MHz (ISO/IEC 14443)</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Compatible With</th>
+                            {% if kit.name == 'InfoRing' %}
+                            <td>Most NFC-enabled smartphones (Android 4.0+, iPhone 7+)</td>
+                            {% elif kit.name == 'AccessRing' %}
+                            <td>Most RFID/NFC access control systems (125kHz or 13.56MHz)</td>
+                            {% elif kit.name == 'PayRing' %}
+                            <td>Any contactless payment terminal (NFC-based payments)</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <th scope="row">Water Resistant</th>
+                            <td>Yes (IP67 rated when properly assembled)</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Battery Required</th>
+                            <td>No - powered by NFC field from reader device</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Assembly Time</th>
+                            {% if kit.name == 'InfoRing' %}
+                            <td>Approximately 15-20 minutes</td>
+                            {% elif kit.name == 'AccessRing' %}
+                            <td>Approximately 20-25 minutes</td>
+                            {% elif kit.name == 'PayRing' %}
+                            <td>Approximately 30-45 minutes</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <th scope="row">Difficulty Level</th>
+                            {% if kit.name == 'InfoRing' %}
+                            <td>Beginner</td>
+                            {% elif kit.name == 'AccessRing' %}
+                            <td>Intermediate</td>
+                            {% elif kit.name == 'PayRing' %}
+                            <td>Intermediate to Advanced</td>
+                            {% endif %}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="tab-pane fade" id="assembly" role="tabpanel">
+                <h3>Assembly Guide</h3>
+                <p>Each PayRing kit comes with detailed step-by-step instructions. Below is a general overview of the assembly process:</p>
+                
+                {% if kit.name == 'InfoRing' %}
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h4 class="h5 card-title">Step 1: Prepare Components</h4>
+                                <p>Unpack all components and verify that you have all necessary parts. Make sure to work in a clean, well-lit area.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h4 class="h5 card-title">Step 2: Position NFC Chip</h4>
+                                <p>Place the NFC chip in the ring's designated compartment, making sure it's properly aligned.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h4 class="h5 card-title">Step 3: Secure the Chip</h4>
+                                <p>Use the provided adhesive or mounting mechanism to secure the chip in place. Make sure it cannot move within the compartment.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h4 class="h5 card-title">Step 4: Activate and Test</h4>
+                                <p>Login to our platform using the provided credentials, configure your redirect link, and test your new InfoRing with a smartphone.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% elif kit.name == 'AccessRing' %}
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h4 class="h5 card-title">Step 1: Prepare Components</h4>
+                                <p>Unpack all components and verify that you have all necessary parts. Set up the ESP32 module.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h4 class="h5 card-title">Step 2: Transfer Access Data</h4>
+                                <p>Use the ESP32 module to copy data from your existing access card to the ring's NFC chip.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h4 class="h5 card-title">Step 3: Assemble the Ring</h4>
+                                <p>Place the programmed NFC chip in the ring's compartment and secure it in place using the provided materials.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h4 class="h5 card-title">Step 4: Test and Seal</h4>
+                                <p>Test the ring with your access system, then apply the sealant to waterproof and protect the NFC chip.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% elif kit.name == 'PayRing' %}
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h4 class="h5 card-title">Step 1: Extract Credit Card Chip</h4>
+                                <p>Carefully use the acetone to dissolve the plastic around the NFC payment chip in your credit card, following the detailed safety instructions.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h4 class="h5 card-title">Step 2: Prepare the Ring</h4>
+                                <p>Clean the 3D printed ring compartment and make sure it's ready to receive the payment chip.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h4 class="h5 card-title">Step 3: Place and Position</h4>
+                                <p>Carefully place the extracted payment chip in the ring compartment, ensuring correct orientation for optimal performance.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h4 class="h5 card-title">Step 4: Seal with Epoxy</h4>
+                                <p>Mix and apply the epoxy resin to secure and protect the payment chip. Allow proper curing time before using.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <div class="alert alert-info mt-4">
+                    <i class="fas fa-info-circle me-2"></i> Full detailed instructions with images are included in each kit package. You can also find video tutorials on our website.
+                </div>
+            </div>
+            
+            <div class="tab-pane fade" id="reviews" role="tabpanel">
+                <h3>Customer Reviews</h3>
+                <div class="mb-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="me-3">
+                            <span class="display-4">4.7</span>
+                        </div>
+                        <div>
+                            <div class="mb-2">
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star-half-alt text-warning"></i>
+                            </div>
+                            <p class="mb-0">Based on 27 reviews</p>
+                        </div>
+                    </div>
+                    <div class="progress mb-2" style="height: 10px;">
+                        <div class="progress-bar bg-warning" style="width: 85%;">5 stars</div>
+                    </div>
+                    <div class="progress mb-2" style="height: 10px;">
+                        <div class="progress-bar bg-warning" style="width: 12%;">4 stars</div>
+                    </div>
+                    <div class="progress mb-2" style="height: 10px;">
+                        <div class="progress-bar bg-warning" style="width: 3%;">3 stars</div>
+                    </div>
+                    <div class="progress mb-2" style="height: 10px;">
+                        <div class="progress-bar bg-warning" style="width: 0%;">2 stars</div>
+                    </div>
+                    <div class="progress mb-3" style="height: 10px;">
+                        <div class="progress-bar bg-warning" style="width: 0%;">1 star</div>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <!-- Sample Reviews -->
+                <div class="review-item mb-4">
+                    <div class="d-flex">
+                        <div class="flex-shrink-0">
+                            <img src="{{ url_for('static', filename='images/avatar-1.jpg') }}" class="rounded-circle" width="50" height="50" alt="User avatar">
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4 class="h6 mb-0">James Wilson</h4>
+                                <small class="text-muted">3 weeks ago</small>
+                            </div>
+                            <div class="mb-2">
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                            </div>
+                            <p>Absolutely love my {{ kit.name }}! The assembly instructions were clear and it only took me about 30 minutes to put everything together. Works flawlessly with my phone and is a great conversation starter.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="review-item mb-4">
+                    <div class="d-flex">
+                        <div class="flex-shrink-0">
+                            <img src="{{ url_for('static', filename='images/avatar-2.jpg') }}" class="rounded-circle" width="50" height="50" alt="User avatar">
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4 class="h6 mb-0">Sarah Johnson</h4>
+                                <small class="text-muted">1 month ago</small>
+                            </div>
+                            <div class="mb-2">
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="far fa-star text-warning"></i>
+                            </div>
+                            <p>Great kit with everything needed to build your own ring. I knocked off one star because I had some trouble with the sizing, but customer service was very helpful in resolving the issue. The final result is amazing!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="review-item mb-4">
+                    <div class="d-flex">
+                        <div class="flex-shrink-0">
+                            <img src="{{ url_for('static', filename='images/avatar-3.jpg') }}" class="rounded-circle" width="50" height="50" alt="User avatar">
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4 class="h6 mb-0">Michael Chen</h4>
+                                <small class="text-muted">2 months ago</small>
+                            </div>
+                            <div class="mb-2">
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                            </div>
+                            <p>This is my second PayRing product, and it's just as great as the first. The {{ kit.name }} was super easy to assemble and looks really sleek. I get compliments on it all the time, and people are amazed when I show them what it can do!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="#" class="btn btn-outline-primary">View All Reviews</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Products -->
+<section class="related-products-section py-5">
+    <div class="container">
+        <h2 class="mb-4">You Might Also Like</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 product-card">
+                    <img src="{{ url_for('static', filename='images/related-product-1.jpg') }}" class="card-img-top" alt="Related product">
+                    <div class="card-body">
+                        <h3 class="h5 card-title">Ring Sizing Kit</h3>
+                        <p class="card-text">Get the perfect fit for your PayRing with our comprehensive sizing kit. Includes ring sizers for all finger sizes.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="h4 mb-0">$9.99</span>
+                            <a href="#" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 product-card">
+                    <img src="{{ url_for('static', filename='images/related-product-2.jpg') }}" class="card-img-top" alt="Related product">
+                    <div class="card-body">
+                        <h3 class="h5 card-title">Premium Ring Case</h3>
+                        <p class="card-text">Store and protect your PayRing with our elegant storage case. Includes padded interior and strong outer shell.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="h4 mb-0">$14.99</span>
+                            <a href="#" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 product-card">
+                    <img src="{{ url_for('static', filename='images/related-product-3.jpg') }}" class="card-img-top" alt="Related product">
+                    <div class="card-body">
+                        <h3 class="h5 card-title">NFC Tester Tool</h3>
+                        <p class="card-text">Verify and test the functionality of any NFC device, including your PayRing. Essential for troubleshooting.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="h4 mb-0">$19.99</span>
+                            <a href="#" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Size Guide Modal -->
+<div class="modal fade" id="sizeGuideModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ring Size Guide</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>How to Measure Your Ring Size</h4>
+                        <p>Follow these simple steps to find your perfect ring size:</p>
+                        <ol>
+                            <li>Wrap a piece of string or paper around your finger</li>
+                            <li>Mark where the string or paper overlaps to form a complete circle</li>
+                            <li>Measure the length in millimeters</li>
+                            <li>Use the chart on the right to find your ring size</li>
+                        </ol>
+                        <div class="alert alert-info">
+                            <strong>Pro Tip:</strong> Measure your finger at the end of the day when your fingers are at their largest. Also, make sure to measure the specific finger where you plan to wear the ring.
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Ring Size Chart</h4>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>US Size</th>
+                                    <th>UK Size</th>
+                                    <th>Inside Circumference (mm)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>5</td>
+                                    <td>J 1/2</td>
+                                    <td>49.3</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>L 1/2</td>
+                                    <td>51.9</td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                    <td>N 1/2</td>
+                                    <td>54.4</td>
+                                </tr>
+                                <tr>
+                                    <td>8</td>
+                                    <td>P 1/2</td>
+                                    <td>57.0</td>
+                                </tr>
+                                <tr>
+                                    <td>9</td>
+                                    <td>R 1/2</td>
+                                    <td>59.5</td>
+                                </tr>
+                                <tr>
+                                    <td>10</td>
+                                    <td>T 1/2</td>
+                                    <td>62.1</td>
+                                </tr>
+                                <tr>
+                                    <td>11</td>
+                                    <td>V 1/2</td>
+                                    <td>64.6</td>
+                                </tr>
+                                <tr>
+                                    <td>12</td>
+                                    <td>X 1/2</td>
+                                    <td>67.2</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Checkout Modal -->
+<div class="modal fade" id="checkoutModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Complete Your Order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-7">
+                        <h4 class="mb-3">Shipping Information</h4>
+                        <form id="checkout-form">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="firstName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="firstName" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="lastName" required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="phone" class="form-label">Phone</label>
+                                    <input type="tel" class="form-control" id="phone">
+                                </div>
+                                <div class="col-12">
+                                    <label for="address" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="address" required>
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="city" class="form-label">City</label>
+                                    <input type="text" class="form-control" id="city" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="state" class="form-label">State</label>
+                                    <select class="form-select" id="state" required>
+                                        <option value="">Choose...</option>
+                                        <option>California</option>
+                                        <option>New York</option>
+                                        <option>Texas</option>
+                                        <!-- Add more states as needed -->
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="zip" class="form-label">Zip</label>
+                                    <input type="text" class="form-control" id="zip" required>
+                                </div>
+                            </div>
+                            
+                            <hr class="my-4">
+                            
+                            <h4 class="mb-3">Payment Information</h4>
+                            <div class="my-3">
+                                <div class="form-check">
+                                    <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked required>
+                                    <label class="form-check-label" for="credit">Credit Card</label>
+                                </div>
+                                <div class="form-check">
+                                    <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required>
+                                    <label class="form-check-label" for="paypal">PayPal</label>
+                                </div>
+                            </div>
+                            
+                            <div class="row gy-3">
+                                <div class="col-md-6">
+                                    <label for="cc-name" class="form-label">Name on Card</label>
+                                    <input type="text" class="form-control" id="cc-name" required>
+                                    <small class="text-muted">Full name as displayed on card</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="cc-number" class="form-label">Credit Card Number</label>
+                                    <input type="text" class="form-control" id="cc-number" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="cc-expiration" class="form-label">Expiration</label>
+                                    <input type="text" class="form-control" id="cc-expiration" placeholder="MM/YY" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="cc-cvv" class="form-label">CVV</label>
+                                    <input type="text" class="form-control" id="cc-cvv" required>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="my-0">Order Summary</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span>Item:</span>
+                                    <span id="summary-item">{{ kit.name }} Kit</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span>Ring Type:</span>
+                                    <span id="summary-ring-type">-</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span>Ring Size:</span>
+                                    <span id="summary-ring-size">-</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span>Quantity:</span>
+                                    <span id="summary-quantity">1</span>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span>Subtotal:</span>
+                                    <span id="summary-subtotal">${{ "%.2f"|format(kit.price) }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span>Shipping:</span>
+                                    <span id="summary-shipping">$5.99</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span>Tax:</span>
+                                    <span id="summary-tax">$0.00</span>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span class="fw-bold">Total:</span>
+                                    <span class="fw-bold h4" id="summary-total">${{ "%.2f"|format(kit.price + 5.99) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="place-order">Place Order</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Thumbnail image click handler
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        const mainImage = document.querySelector('.product-image');
+        
+        thumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', function() {
+                // Remove active class from all thumbnails
+                thumbnails.forEach(t => t.classList.remove('active'));
+                // Add active class to clicked thumbnail
+                this.classList.add('active');
+                // Update main image src
+                mainImage.src = this.src.replace('-thumb', '');
+            });
+        });
+        
+        // Quantity selector
+        const quantityInput = document.getElementById('quantity');
+        const decreaseBtn = document.querySelector('.quantity-decrease');
+        const increaseBtn = document.querySelector('.quantity-increase');
+        
+        decreaseBtn.addEventListener('click', function() {
+            let currentValue = parseInt(quantityInput.value);
+            if (currentValue > 1) {
+                quantityInput.value = currentValue - 1;
+                updateSummary();
+            }
+        });
+        
+        increaseBtn.addEventListener('click', function() {
+            let currentValue = parseInt(quantityInput.value);
+            if (currentValue < 10) {
+                quantityInput.value = currentValue + 1;
+                updateSummary();
+            }
+        });
+        
+        quantityInput.addEventListener('change', function() {
+            let currentValue = parseInt(this.value);
+            if (currentValue < 1) {
+                this.value = 1;
+            } else if (currentValue > 10) {
+                this.value = 10;
+            }
+            updateSummary();
+        });
+        
+        // Ring type and size selection
+        const ringTypeSelect = document.getElementById('ringType');
+        const ringSizeSelect = document.getElementById('ringSize');
+        
+        ringTypeSelect.addEventListener('change', updateSummary);
+        ringSizeSelect.addEventListener('change', updateSummary);
+        
+        // Add to cart and Buy Now buttons
+        const addToCartBtn = document.getElementById('add-to-cart');
+        const buyNowBtn = document.getElementById('buy-now');
+        
+        addToCartBtn.addEventListener('click', function() {
+            if (validateForm()) {
+                alert('Added to cart!');
+                // In a real app, you would add to cart via AJAX
+            }
+        });
+        
+        buyNowBtn.addEventListener('click', function() {
+            if (validateForm()) {
+                // Show checkout modal
+                const checkoutModal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+                checkoutModal.show();
+            }
+        });
+        
+        // Place order button
+        const placeOrderBtn = document.getElementById('place-order');
+        
+        placeOrderBtn.addEventListener('click', function() {
+            const checkoutForm = document.getElementById('checkout-form');
+            if (checkoutForm.checkValidity()) {
+                placeOrder();
+            } else {
+                // Trigger HTML5 validation
+                checkoutForm.reportValidity();
+            }
+        });
+        
+        // Validate product form
+        function validateForm() {
+            const ringType = ringTypeSelect.value;
+            const ringSize = ringSizeSelect.value;
+            
+            if (!ringType) {
+                alert('Please select a ring type');
+                ringTypeSelect.focus();
+                return false;
+            }
+            
+            if (!ringSize) {
+                alert('Please select a ring size');
+                ringSizeSelect.focus();
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // Update order summary
+        function updateSummary() {
+            const quantity = parseInt(quantityInput.value) || 1;
+            const ringType = ringTypeSelect.options[ringTypeSelect.selectedIndex]?.text || '-';
+            const ringSize = ringSizeSelect.options[ringSizeSelect.selectedIndex]?.text || '-';
+            const price = {{ kit.price }};
+            const shipping = 5.99;
+            
+            // Update summary fields
+            document.getElementById('summary-ring-type').textContent = ringType;
+            document.getElementById('summary-ring-size').textContent = ringSize;
+            document.getElementById('summary-quantity').textContent = quantity;
+            
+            const subtotal = price * quantity;
+            const tax = subtotal * 0.08; // Assuming 8% tax rate
+            const total = subtotal + shipping + tax;
+            
+            document.getElementById('summary-subtotal').textContent = '$' + subtotal.toFixed(2);
+            document.getElementById('summary-tax').textContent = '$' + tax.toFixed(2);
+            document.getElementById('summary-total').textContent = '$' + total.toFixed(2);
+        }
+        
+        // Place order function
+        function placeOrder() {
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+            const city = document.getElementById('city').value;
+            const state = document.getElementById('state').value;
+            const zip = document.getElementById('zip').value;
+            
+            const kitTypeId = {{ kit.id }};
+            const ringTypeId = ringTypeSelect.value;
+            const ringSizeId = ringSizeSelect.value;
+            const quantity = parseInt(quantityInput.value) || 1;
+            
+            // Prepare order data
+            const orderData = {
+                customerName: firstName + ' ' + lastName,
+                customerEmail: email,
+                customerPhone: phone,
+                shippingAddress: address + ', ' + city + ', ' + state + ' ' + zip,
+                items: [{
+                    kitTypeId: kitTypeId,
+                    ringTypeId: ringTypeId,
+                    ringSizeId: ringSizeId,
+                    quantity: quantity
+                }]
+            };
+            
+            // Submit order via AJAX
+            fetch('{{ url_for("shop.create_order") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(orderData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect to order confirmation page
+                    window.location.href = '{{ url_for("shop.order_confirmation", order_id=0) }}'.replace('0', data.orderId);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while placing your order. Please try again.');
+            });
+        }
+        
+        // Initialize summary
+        updateSummary();
+    });
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .product-image-container {
+        height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8f9fa;
+        border-radius: 0.25rem;
+    }
+    
+    .product-image {
+        max-height: 100%;
+        object-fit: contain;
+    }
+    
+    .thumbnail {
+        cursor: pointer;
+        border: 2px solid transparent;
+    }
+    
+    .thumbnail.active {
+        border-color: #4a6bef;
+    }
+    
+    .quantity-selector {
+        max-width: 150px;
+    }
+    
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+    
+    .bg-primary {
+        background-color: #4a6bef !important;
+    }
+    
+    .text-primary {
+        color: #4a6bef !important;
+    }
+    
+    .btn-primary {
+        background-color: #4a6bef;
+        border-color: #4a6bef;
+    }
+    
+    .btn-primary:hover {
+        background-color: #3a59cb;
+        border-color: #3a59cb;
+    }
+    
+    .btn-outline-primary {
+        color: #4a6bef;
+        border-color: #4a6bef;
+    }
+    
+    .btn-outline-primary:hover {
+        background-color: #4a6bef;
+        border-color: #4a6bef;
+    }
+    
+    .nav-tabs .nav-link.active {
+        color: #4a6bef;
+        border-color: #dee2e6 #dee2e6 #fff;
+    }
+    
+    .nav-tabs .nav-link:hover {
+        border-color: #e9ecef #e9ecef #dee2e6;
+        isolation: isolate;
+    }
+</style>
+{% endblock %}

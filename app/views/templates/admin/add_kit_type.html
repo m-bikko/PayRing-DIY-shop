@@ -1,0 +1,66 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Add Kit Type - PayRing Admin{% endblock %}
+
+{% block header %}Add New Kit Type{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Kit Type Details</h5>
+                <a href="{{ url_for('admin.kit_types') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Back to Kit Types
+                </a>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('admin.add_kit_type') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Kit Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                        <div class="form-text">Enter a unique name for this kit type (e.g., InfoRing, AccessRing, PayRing)</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                        <div class="form-text">Provide a detailed description of what this kit includes and its purpose</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price ($)</label>
+                        <input type="number" class="form-control" id="price" name="price" step="0.01" min="0" required>
+                        <div class="form-text">Set the base price for this kit type (e.g., 49.99)</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="image_url" class="form-label">Image URL</label>
+                        <input type="url" class="form-control" id="image_url" name="image_url">
+                        <div class="form-text">Enter a URL for the kit image (optional)</div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                        <a href="{{ url_for('admin.kit_types') }}" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Create Kit Type</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .btn-primary {
+        background-color: #4a6bef;
+        border-color: #4a6bef;
+    }
+    
+    .btn-primary:hover {
+        background-color: #3a59cb;
+        border-color: #3a59cb;
+    }
+</style>
+{% endblock %}

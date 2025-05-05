@@ -1,0 +1,193 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Manage Ring Sizes - PayRing Admin{% endblock %}
+
+{% block header %}Manage Ring Sizes{% endblock %}
+
+{% block content %}
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">All Ring Sizes</h5>
+        <a href="{{ url_for('admin.add_ring_size') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i> Add New Ring Size
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Size</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if sizes %}
+                        {% for size in sizes %}
+                        <tr>
+                            <td>{{ size.id }}</td>
+                            <td>{{ size.size }}</td>
+                            <td>{{ size.created_at.strftime('%Y-%m-%d') }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{{ url_for('admin.edit_ring_size', size_id=size.id) }}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-sm btn-danger" 
+                                            data-bs-toggle="modal" data-bs-target="#deleteSizeModal{{ size.id }}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                                
+                                <!-- Delete Modal -->
+                                <div class="modal fade" id="deleteSizeModal{{ size.id }}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Confirm Deletion</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to delete the ring size <strong>{{ size.size }}</strong>?</p>
+                                                <p class="text-danger">This action cannot be undone. All data associated with this ring size will be permanently removed.</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <form action="{{ url_for('admin.delete_ring_size', size_id=size.id) }}" method="POST">
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center">No ring sizes found</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Ring Size Info -->
+<div class="card shadow">
+    <div class="card-header py-3">
+        <h5 class="mb-0">Ring Size Information</h5>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-info">
+            <h5 class="alert-heading"><i class="fas fa-info-circle me-2"></i>Managing Ring Sizes</h5>
+            <p>Ring sizes define the available size options for customers when ordering kits. Proper sizing is important for comfort and functionality.</p>
+            <hr>
+            <p class="mb-0">Note: If a ring size is used in any orders, it cannot be deleted to maintain order history integrity.</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-6">
+                <h5 class="mt-4 mb-3">Ring Size Chart</h5>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>US Size</th>
+                            <th>UK Size</th>
+                            <th>Inside Circumference (mm)</th>
+                            <th>Inside Diameter (mm)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>5</td>
+                            <td>J 1/2</td>
+                            <td>49.3</td>
+                            <td>15.7</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>L 1/2</td>
+                            <td>51.9</td>
+                            <td>16.5</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>N 1/2</td>
+                            <td>54.4</td>
+                            <td>17.3</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>P 1/2</td>
+                            <td>57.0</td>
+                            <td>18.1</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>R 1/2</td>
+                            <td>59.5</td>
+                            <td>18.9</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>T 1/2</td>
+                            <td>62.1</td>
+                            <td>19.8</td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td>V 1/2</td>
+                            <td>64.6</td>
+                            <td>20.6</td>
+                        </tr>
+                        <tr>
+                            <td>12</td>
+                            <td>X 1/2</td>
+                            <td>67.2</td>
+                            <td>21.4</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-6">
+                <h5 class="mt-4 mb-3">How to Help Customers Find Their Size</h5>
+                <div class="card border-0 bg-light p-3">
+                    <div class="card-body">
+                        <h6 class="mb-3">Measurement Methods</h6>
+                        <ol>
+                            <li class="mb-2"><strong>String Method:</strong> Wrap a string around the finger, mark where it overlaps, and measure the length in millimeters.</li>
+                            <li class="mb-2"><strong>Paper Strip Method:</strong> Cut a thin strip of paper, wrap it around the finger, mark where it overlaps, and measure.</li>
+                            <li class="mb-2"><strong>Existing Ring:</strong> Measure the inside diameter of a ring that already fits well.</li>
+                        </ol>
+                        <h6 class="mt-4 mb-3">Tips for Accurate Sizing</h6>
+                        <ul>
+                            <li class="mb-2">Measure at the end of the day when fingers are at their largest</li>
+                            <li class="mb-2">Measure the specific finger where the ring will be worn</li>
+                            <li class="mb-2">Consider temperature (fingers expand in heat, contract in cold)</li>
+                            <li class="mb-2">If between sizes, go with the larger size</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .btn-primary {
+        background-color: #4a6bef;
+        border-color: #4a6bef;
+    }
+    
+    .btn-primary:hover {
+        background-color: #3a59cb;
+        border-color: #3a59cb;
+    }
+</style>
+{% endblock %}

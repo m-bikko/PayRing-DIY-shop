@@ -1,0 +1,166 @@
+# PayRing E-commerce Platform - Image Requirements
+
+This document outlines all the images needed for the PayRing website. All image files should be placed in the `/app/views/static/images/` directory.
+
+## Logo and Brand Images
+
+1. **payring-logo.png**
+   - Description: Main PayRing logo (with transparent background)
+   - Size: 300x80px
+   - Format: PNG with transparency
+   - Location: Used in header and footer
+
+2. **favicon.ico**
+   - Description: Website favicon
+   - Size: 32x32px
+   - Format: ICO
+   - Location: Browser tab icon
+
+## Landing Page Images
+
+3. **hero-ring.png**
+   - Description: Hero image of a PayRing product on a hand
+   - Size: 800x600px
+   - Format: PNG or JPG
+   - Location: Hero section of landing page
+
+4. **kit-placeholder.jpg**
+   - Description: Generic placeholder for kit images
+   - Size: 600x400px
+   - Format: JPG
+   - Location: Used when specific kit images are not available
+
+5. **testimonial-1.jpg**, **testimonial-2.jpg**, **testimonial-3.jpg**
+   - Description: Customer profile photos for testimonials
+   - Size: 150x150px
+   - Format: JPG
+   - Location: Testimonials section of landing page
+
+## Product Images
+
+6. **infoRing-kit.jpg**
+   - Description: Main product image for InfoRing kit
+   - Size: 800x600px
+   - Format: JPG
+   - Location: Product listings and detail page
+
+7. **accessRing-kit.jpg**
+   - Description: Main product image for AccessRing kit
+   - Size: 800x600px
+   - Format: JPG
+   - Location: Product listings and detail page
+
+8. **payRing-kit.jpg**
+   - Description: Main product image for PayRing kit
+   - Size: 800x600px
+   - Format: JPG
+   - Location: Product listings and detail page
+
+9. **kit-thumb-1.jpg**, **kit-thumb-2.jpg**, **kit-thumb-3.jpg**, **kit-thumb-4.jpg**
+   - Description: Thumbnail gallery images for kit detail pages
+   - Size: 200x150px
+   - Format: JPG
+   - Location: Product detail pages
+
+10. **ring-placeholder.jpg**
+    - Description: Generic placeholder for ring type images
+    - Size: 300x300px
+    - Format: JPG
+    - Location: Used when specific ring type images are not available
+
+## Ring Type Images
+
+11. **metal-ring.jpg**
+    - Description: Image of metal ring type
+    - Size: 300x300px
+    - Format: JPG
+    - Location: Ring type selection
+
+12. **silicone-ring.jpg**
+    - Description: Image of silicone ring type
+    - Size: 300x300px
+    - Format: JPG
+    - Location: Ring type selection
+
+13. **wooden-ring.jpg**
+    - Description: Image of wooden ring type
+    - Size: 300x300px
+    - Format: JPG
+    - Location: Ring type selection
+
+14. **carbon-fiber-ring.jpg**
+    - Description: Image of carbon fiber ring type
+    - Size: 300x300px
+    - Format: JPG
+    - Location: Ring type selection
+
+## Related Products Images
+
+15. **related-product-1.jpg**, **related-product-2.jpg**, **related-product-3.jpg**
+    - Description: Images for related products section
+    - Size: 400x300px
+    - Format: JPG
+    - Location: "You might also like" section on product detail pages
+
+## User Profile Images
+
+16. **avatar-1.jpg**, **avatar-2.jpg**, **avatar-3.jpg**
+    - Description: User profile images for reviews
+    - Size: 100x100px
+    - Format: JPG
+    - Location: Product reviews section
+
+## Admin Panel Images
+
+17. **admin-avatar.jpg**
+    - Description: Default admin profile picture
+    - Size: 100x100px
+    - Format: JPG
+    - Location: Admin panel header
+
+## Image Guidelines
+
+- All product images should be professionally photographed on a white or light gray background
+- Images should be optimized for web (compressed) without sacrificing quality
+- Maintain consistent aspect ratios for each image type
+- For product images, show the complete kit with all components visible
+- For ring types, display the ring on a finger to give proper scale reference
+- If possible, provide retina-ready (2x) versions of all images for high-DPI displays
+
+## Folder Structure
+
+```
+/app/views/static/images/
+├── logo/
+│   ├── payring-logo.png
+│   └── favicon.ico
+├── landing/
+│   ├── hero-ring.png
+│   ├── testimonial-1.jpg
+│   ├── testimonial-2.jpg
+│   └── testimonial-3.jpg
+├── products/
+│   ├── infoRing-kit.jpg
+│   ├── accessRing-kit.jpg
+│   ├── payRing-kit.jpg
+│   ├── kit-thumb-1.jpg
+│   ├── kit-thumb-2.jpg
+│   ├── kit-thumb-3.jpg
+│   ├── kit-thumb-4.jpg
+│   ├── related-product-1.jpg
+│   ├── related-product-2.jpg
+│   └── related-product-3.jpg
+├── rings/
+│   ├── metal-ring.jpg
+│   ├── silicone-ring.jpg
+│   ├── wooden-ring.jpg
+│   └── carbon-fiber-ring.jpg
+├── placeholders/
+│   ├── kit-placeholder.jpg
+│   └── ring-placeholder.jpg
+└── users/
+    ├── avatar-1.jpg
+    ├── avatar-2.jpg
+    ├── avatar-3.jpg
+    └── admin-avatar.jpg
+```

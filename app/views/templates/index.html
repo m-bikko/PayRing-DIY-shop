@@ -1,0 +1,285 @@
+{% extends 'base.html' %}
+
+{% block title %}PayRing - DIY NFC Ring Kits{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Create Your Own NFC Ring with PayRing Kits</h1>
+                <p class="lead mb-4">Transform how you interact with technology using our DIY kits to create your custom NFC ring for payments, access control, or information sharing.</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    <a href="{{ url_for('shop.shop_index') }}" class="btn btn-light btn-lg px-4 me-md-2">Shop Now</a>
+                    <a href="{{ url_for('main.features') }}" class="btn btn-outline-light btn-lg px-4">Learn More</a>
+                </div>
+            </div>
+            <div class="col-lg-6 mt-5 mt-lg-0 text-center">
+                <img src="{{ url_for('static', filename='images/hero-ring.png') }}" alt="PayRing Kit" class="img-fluid rounded shadow-lg">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Why Choose PayRing?</h2>
+            <p class="lead">Our DIY kits make it easy to create your own NFC ring with multiple functionality options</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-primary text-white rounded-circle mb-3 mx-auto">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <h3 class="h4 mb-3">Contactless Convenience</h3>
+                        <p class="card-text">Access your digital identity, websites, or payment methods with a simple wave of your hand.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-primary text-white rounded-circle mb-3 mx-auto">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h3 class="h4 mb-3">DIY Experience</h3>
+                        <p class="card-text">Build your own ring from scratch with our easy-to-follow kits and instructions.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-primary text-white rounded-circle mb-3 mx-auto">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 class="h4 mb-3">Secure & Durable</h3>
+                        <p class="card-text">Water-resistant and built to last with high-quality materials and secure technology.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Products Section -->
+<section class="products-section py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Our Ring Kits</h2>
+            <p class="lead">Choose the perfect kit for your needs</p>
+        </div>
+        
+        <div class="row g-4">
+            {% for kit in kits %}
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="{{ kit.image_url or url_for('static', filename='images/kit-placeholder.jpg') }}" class="card-img-top" alt="{{ kit.name }}">
+                    <div class="card-body p-4">
+                        <h3 class="h4 mb-3">{{ kit.name }}</h3>
+                        <p class="card-text">{{ kit.description[:100] }}{% if kit.description|length > 100 %}...{% endif %}</p>
+                        <p class="fw-bold fs-5">${{ "%.2f"|format(kit.price) }}</p>
+                        <a href="{{ url_for('shop.kit_detail', kit_id=kit.id) }}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-5">
+            <a href="{{ url_for('shop.shop_index') }}" class="btn btn-lg btn-outline-primary">View All Products</a>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="how-it-works-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">How It Works</h2>
+            <p class="lead">Simple steps to create your own NFC ring</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <div class="row g-5">
+                    <div class="col-md-3 text-center">
+                        <div class="step-number bg-primary text-white rounded-circle mb-3 mx-auto">1</div>
+                        <h3 class="h5">Choose Your Kit</h3>
+                        <p>Select the kit that matches your needs: InfoRing, AccessRing, or PayRing.</p>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="step-number bg-primary text-white rounded-circle mb-3 mx-auto">2</div>
+                        <h3 class="h5">Build Your Ring</h3>
+                        <p>Follow our simple instructions to assemble your custom NFC ring.</p>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="step-number bg-primary text-white rounded-circle mb-3 mx-auto">3</div>
+                        <h3 class="h5">Configure</h3>
+                        <p>Program your ring with your desired functionality using our guides.</p>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="step-number bg-primary text-white rounded-circle mb-3 mx-auto">4</div>
+                        <h3 class="h5">Enjoy!</h3>
+                        <p>Experience the convenience of your new NFC ring technology.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials-section py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">What Our Customers Say</h2>
+            <p class="lead">Real experiences from PayRing users</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="flex-shrink-0">
+                                <img src="{{ url_for('static', filename='images/testimonial-1.jpg') }}" class="rounded-circle" width="60" height="60" alt="Customer">
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h3 class="h5 mb-0">Sarah Johnson</h3>
+                                <div class="text-warning">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="card-text">"I love my InfoRing! I've programmed it to share my contact info at networking events. The kit was super easy to assemble and works perfectly."</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="flex-shrink-0">
+                                <img src="{{ url_for('static', filename='images/testimonial-2.jpg') }}" class="rounded-circle" width="60" height="60" alt="Customer">
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h3 class="h5 mb-0">Michael Torres</h3>
+                                <div class="text-warning">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="card-text">"The AccessRing kit was a game-changer for my office. I now use it to access our building and my workstation. Great security solution!"</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="flex-shrink-0">
+                                <img src="{{ url_for('static', filename='images/testimonial-3.jpg') }}" class="rounded-circle" width="60" height="60" alt="Customer">
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h3 class="h5 mb-0">Emily Wong</h3>
+                                <div class="text-warning">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="card-text">"PayRing is amazing! I can make contactless payments just by waving my hand. The DIY process was fun and educational. Highly recommend!"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 text-lg-start text-center">
+                <h2 class="display-5 fw-bold mb-3">Ready to create your NFC ring?</h2>
+                <p class="lead mb-lg-0">Get started with your own DIY kit today and experience the future of wearable technology.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end text-center">
+                <a href="{{ url_for('shop.shop_index') }}" class="btn btn-light btn-lg">Shop Now</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Custom styles for the landing page */
+    .hero-section {
+        background: linear-gradient(135deg, #4a6bef 0%, #7c3aed 100%);
+        padding-top: 5rem;
+        padding-bottom: 5rem;
+    }
+    
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+    
+    .step-number {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    
+    .bg-primary {
+        background-color: #4a6bef !important;
+    }
+    
+    .btn-primary {
+        background-color: #4a6bef;
+        border-color: #4a6bef;
+    }
+    
+    .btn-primary:hover {
+        background-color: #3a59cb;
+        border-color: #3a59cb;
+    }
+    
+    .btn-outline-primary {
+        color: #4a6bef;
+        border-color: #4a6bef;
+    }
+    
+    .btn-outline-primary:hover {
+        background-color: #4a6bef;
+        border-color: #4a6bef;
+    }
+</style>
+{% endblock %}

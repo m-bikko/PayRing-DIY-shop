@@ -1,0 +1,8 @@
+Flask==2.2.3
+Flask-SQLAlchemy==3.0.3
+Flask-WTF==1.1.1
+Flask-Login==0.6.2
+Werkzeug==2.2.3
+WTForms==3.0.1
+email_validator==2.0.0
+watchdog==2.3.1

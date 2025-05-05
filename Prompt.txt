@@ -1,0 +1,30 @@
+I need to make selling landing page. 
+The product we are trying to sell are "kits for making NFC ring by user himself" in 3 variants:
+1) InfoRing: The kit consists only ring and included card with QR, login and password to platform. In ring, there a static link and platform redirects this static link to the link that user has entered.(I don't need the platform, i already have it). After all, if phone supports NFC, if we stay close to phone it opens the static link after redirects to User's link
+2) AccessRing: The kit consists of ring and the module ESP32. ESP32 already programmed to copy and paste the data from CRUD to ring. After all, the ring can be used as pass-card
+3) PayRing: The kit consists of acetone for extracting chip from Credit card and 3d printed ring with empty center and epoxy resin to fix the chip inside. After all, the ring allows to make payments
+
+It must have 2 sides:
+1) User side:
+- Landing page
+- Page to buy:
+options for kit, size, type of ring
+
+After selection and proccess to buy button, it must open modal to enter address and Personal info
+
+2) Admin side:
+- Admin can see the requests for Kits to buy
+- Admin can add type of ring
+- Admin can add size of ring
+
+Make as it was done by senior UI designer. Check up for errors if they are appearing. Make the backend on Python(Flask), SQL Alchemy. MVC project. Create all the templates needed
+
+We need only 3 kits, and only inside(after going to kit), user must pick the options inside.
+
+No need to make login registration inside of the shop.
+
+We can enter to admin's login page in /admin route. Login: admin, password: admin123
+
+Make also landing page. 
+
+For all the images make the sample URL. But in one seperate txt file, write me what images do we need to place in a certain folder

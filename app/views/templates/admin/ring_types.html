@@ -1,0 +1,147 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Manage Ring Types - PayRing Admin{% endblock %}
+
+{% block header %}Manage Ring Types{% endblock %}
+
+{% block content %}
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">All Ring Types</h5>
+        <a href="{{ url_for('admin.add_ring_type') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i> Add New Ring Type
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if rings %}
+                        {% for ring in rings %}
+                        <tr>
+                            <td>{{ ring.id }}</td>
+                            <td>
+                                <img src="{{ ring.image_url or url_for('static', filename='images/ring-placeholder.jpg') }}" 
+                                     alt="{{ ring.name }}" class="img-thumbnail" width="60">
+                            </td>
+                            <td>{{ ring.name }}</td>
+                            <td>{{ ring.created_at.strftime('%Y-%m-%d') }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{{ url_for('admin.edit_ring_type', ring_id=ring.id) }}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-sm btn-danger" 
+                                            data-bs-toggle="modal" data-bs-target="#deleteRingModal{{ ring.id }}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                                
+                                <!-- Delete Modal -->
+                                <div class="modal fade" id="deleteRingModal{{ ring.id }}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Confirm Deletion</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to delete the ring type <strong>{{ ring.name }}</strong>?</p>
+                                                <p class="text-danger">This action cannot be undone. All data associated with this ring type will be permanently removed.</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <form action="{{ url_for('admin.delete_ring_type', ring_id=ring.id) }}" method="POST">
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center">No ring types found</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Ring Type Info -->
+<div class="card shadow">
+    <div class="card-header py-3">
+        <h5 class="mb-0">Ring Type Information</h5>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-info">
+            <h5 class="alert-heading"><i class="fas fa-info-circle me-2"></i>Managing Ring Types</h5>
+            <p>Ring types define the style and material of the ring component in each kit. Customers can select their preferred ring type when ordering a kit.</p>
+            <hr>
+            <p class="mb-0">Note: If a ring type is used in any orders, it cannot be deleted to maintain order history integrity.</p>
+        </div>
+        
+        <div class="row g-4 mt-2">
+            <div class="col-md-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Metal Ring</h5>
+                        <p class="card-text">Durable stainless steel design</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Silicone Ring</h5>
+                        <p class="card-text">Flexible and comfortable for daily wear</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Wooden Ring</h5>
+                        <p class="card-text">Natural and eco-friendly option</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Carbon Fiber Ring</h5>
+                        <p class="card-text">Lightweight and modern aesthetic</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .btn-primary {
+        background-color: #4a6bef;
+        border-color: #4a6bef;
+    }
+    
+    .btn-primary:hover {
+        background-color: #3a59cb;
+        border-color: #3a59cb;
+    }
+</style>
+{% endblock %}

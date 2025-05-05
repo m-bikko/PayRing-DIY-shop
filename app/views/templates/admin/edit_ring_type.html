@@ -1,0 +1,94 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Edit Ring Type - PayRing Admin{% endblock %}
+
+{% block header %}Edit Ring Type{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Edit Ring Type: {{ ring.name }}</h5>
+                <a href="{{ url_for('admin.ring_types') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Back to Ring Types
+                </a>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('admin.edit_ring_type', ring_id=ring.id) }}" method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Ring Type Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ ring.name }}" required>
+                        <div class="form-text">Enter a unique name for this ring type (e.g., Metal, Silicone, Wooden)</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="image_url" class="form-label">Image URL</label>
+                        <input type="url" class="form-control" id="image_url" name="image_url" value="{{ ring.image_url or '' }}">
+                        <div class="form-text">Enter a URL for the ring type image (optional)</div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h6>Preview</h6>
+                        <div class="text-center">
+                            <img src="{{ ring.image_url or url_for('static', filename='images/ring-placeholder.jpg') }}" 
+                                 alt="{{ ring.name }}" class="img-fluid rounded" style="max-height: 200px;" id="image-preview">
+                            <h5 class="mt-2" id="name-preview">{{ ring.name }}</h5>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('admin.ring_types') }}" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Update Ring Type</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Live preview for name and image changes
+        const nameInput = document.getElementById('name');
+        const imageUrlInput = document.getElementById('image_url');
+        
+        const namePreview = document.getElementById('name-preview');
+        const imagePreview = document.getElementById('image-preview');
+        
+        nameInput.addEventListener('input', function() {
+            namePreview.textContent = this.value;
+        });
+        
+        imageUrlInput.addEventListener('input', function() {
+            if (this.value) {
+                imagePreview.src = this.value;
+            } else {
+                imagePreview.src = "{{ url_for('static', filename='images/ring-placeholder.jpg') }}";
+            }
+        });
+        
+        // Handle image load errors
+        imagePreview.addEventListener('error', function() {
+            this.src = "{{ url_for('static', filename='images/ring-placeholder.jpg') }}";
+            alert('Invalid image URL. Please check the URL and try again.');
+        });
+    });
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .btn-primary {
+        background-color: #4a6bef;
+        border-color: #4a6bef;
+    }
+    
+    .btn-primary:hover {
+        background-color: #3a59cb;
+        border-color: #3a59cb;
+    }
+</style>
+{% endblock %}

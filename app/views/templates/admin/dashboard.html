@@ -1,0 +1,299 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Admin Dashboard - PayRing{% endblock %}
+
+{% block header %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Stats Cards -->
+<div class="row g-4 mb-5">
+    <div class="col-xl-3 col-md-6">
+        <div class="card text-bg-primary h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title text-white-50">Total Orders</h6>
+                        <h2 class="display-6 mb-0">{{ orders_count }}</h2>
+                    </div>
+                    <div class="fs-1 text-white-50">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-0">
+                <a href="{{ url_for('admin.orders') }}" class="text-white text-decoration-none">
+                    View All <i class="fas fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card text-bg-warning h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title text-white-50">Pending Orders</h6>
+                        <h2 class="display-6 mb-0">{{ pending_orders }}</h2>
+                    </div>
+                    <div class="fs-1 text-white-50">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-0">
+                <a href="{{ url_for('admin.orders') }}" class="text-white text-decoration-none">
+                    View Pending <i class="fas fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card text-bg-success h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title text-white-50">Kit Types</h6>
+                        <h2 class="display-6 mb-0">{{ kits_count }}</h2>
+                    </div>
+                    <div class="fs-1 text-white-50">
+                        <i class="fas fa-box"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-0">
+                <a href="{{ url_for('admin.kit_types') }}" class="text-white text-decoration-none">
+                    Manage Kits <i class="fas fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card text-bg-info h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title text-white-50">Ring Types</h6>
+                        <h2 class="display-6 mb-0">{{ ring_types_count }}</h2>
+                    </div>
+                    <div class="fs-1 text-white-50">
+                        <i class="fas fa-ring"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-0">
+                <a href="{{ url_for('admin.ring_types') }}" class="text-white text-decoration-none">
+                    Manage Types <i class="fas fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Orders -->
+<div class="card shadow mb-5">
+    <div class="card-header py-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Recent Orders</h5>
+            <a href="{{ url_for('admin.orders') }}" class="btn btn-sm btn-primary">
+                View All Orders
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Order #</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if recent_orders %}
+                        {% for order in recent_orders %}
+                        <tr>
+                            <td>{{ order.id }}</td>
+                            <td>{{ order.customer_name }}</td>
+                            <td>{{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td>${{ "%.2f"|format(order.total_amount) }}</td>
+                            <td>
+                                {% if order.status == 'pending' %}
+                                <span class="badge bg-warning">Pending</span>
+                                {% elif order.status == 'processing' %}
+                                <span class="badge bg-info">Processing</span>
+                                {% elif order.status == 'shipped' %}
+                                <span class="badge bg-primary">Shipped</span>
+                                {% elif order.status == 'delivered' %}
+                                <span class="badge bg-success">Delivered</span>
+                                {% elif order.status == 'cancelled' %}
+                                <span class="badge bg-danger">Cancelled</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ url_for('admin.order_detail', order_id=order.id) }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center">No orders found</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Stats -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow h-100">
+            <div class="card-header py-3">
+                <h5 class="mb-0">Sales by Kit Type</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="kitSalesChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow h-100">
+            <div class="card-header py-3">
+                <h5 class="mb-0">Orders by Status</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="orderStatusChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sample data for charts - in a real app, this would come from the database
+        
+        // Kit Sales Chart
+        const kitSalesCtx = document.getElementById('kitSalesChart').getContext('2d');
+        const kitSalesChart = new Chart(kitSalesCtx, {
+            type: 'bar',
+            data: {
+                labels: ['InfoRing', 'AccessRing', 'PayRing'],
+                datasets: [{
+                    label: 'Sales Count',
+                    data: [25, 18, 32],
+                    backgroundColor: [
+                        'rgba(74, 107, 239, 0.7)',
+                        'rgba(39, 174, 96, 0.7)',
+                        'rgba(231, 76, 60, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(74, 107, 239, 1)',
+                        'rgba(39, 174, 96, 1)',
+                        'rgba(231, 76, 60, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Order Status Chart
+        const orderStatusCtx = document.getElementById('orderStatusChart').getContext('2d');
+        const orderStatusChart = new Chart(orderStatusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'],
+                datasets: [{
+                    data: [{{ pending_orders }}, 5, 12, 36, 2],
+                    backgroundColor: [
+                        'rgba(241, 196, 15, 0.7)',
+                        'rgba(52, 152, 219, 0.7)',
+                        'rgba(74, 107, 239, 0.7)',
+                        'rgba(39, 174, 96, 0.7)',
+                        'rgba(231, 76, 60, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(241, 196, 15, 1)',
+                        'rgba(52, 152, 219, 1)',
+                        'rgba(74, 107, 239, 1)',
+                        'rgba(39, 174, 96, 1)',
+                        'rgba(231, 76, 60, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    },
+                    title: {
+                        display: false
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .card {
+        border: none;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    
+    .text-bg-primary {
+        background-color: #4a6bef !important;
+    }
+    
+    .btn-primary {
+        background-color: #4a6bef;
+        border-color: #4a6bef;
+    }
+    
+    .btn-primary:hover {
+        background-color: #3a59cb;
+        border-color: #3a59cb;
+    }
+    
+    .btn-outline-primary {
+        color: #4a6bef;
+        border-color: #4a6bef;
+    }
+    
+    .btn-outline-primary:hover {
+        background-color: #4a6bef;
+        border-color: #4a6bef;
+    }
+</style>
+{% endblock %}

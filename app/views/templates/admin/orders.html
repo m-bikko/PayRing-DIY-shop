@@ -1,0 +1,225 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Manage Orders - PayRing Admin{% endblock %}
+
+{% block header %}Manage Orders{% endblock %}
+
+{% block content %}
+<div class="card shadow">
+    <div class="card-header py-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">All Orders</h5>
+            <div class="input-group w-25">
+                <input type="text" class="form-control" id="orderSearch" placeholder="Search orders...">
+                <button class="btn btn-outline-primary" type="button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover" id="ordersTable">
+                <thead>
+                    <tr>
+                        <th>Order #</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if orders %}
+                        {% for order in orders %}
+                        <tr>
+                            <td>{{ order.id }}</td>
+                            <td>{{ order.customer_name }}</td>
+                            <td>{{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td>${{ "%.2f"|format(order.total_amount) }}</td>
+                            <td>
+                                {% if order.status == 'pending' %}
+                                <span class="badge bg-warning">Pending</span>
+                                {% elif order.status == 'processing' %}
+                                <span class="badge bg-info">Processing</span>
+                                {% elif order.status == 'shipped' %}
+                                <span class="badge bg-primary">Shipped</span>
+                                {% elif order.status == 'delivered' %}
+                                <span class="badge bg-success">Delivered</span>
+                                {% elif order.status == 'cancelled' %}
+                                <span class="badge bg-danger">Cancelled</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ url_for('admin.order_detail', order_id=order.id) }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center">No orders found</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        
+        {% if orders %}
+        <nav aria-label="Orders pagination">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Order Status Filter -->
+<div class="card shadow mt-4">
+    <div class="card-header py-3">
+        <h5 class="mb-0">Filter by Status</h5>
+    </div>
+    <div class="card-body">
+        <div class="btn-group w-100">
+            <button type="button" class="btn btn-outline-secondary active filter-btn" data-filter="all">All</button>
+            <button type="button" class="btn btn-outline-warning filter-btn" data-filter="pending">Pending</button>
+            <button type="button" class="btn btn-outline-info filter-btn" data-filter="processing">Processing</button>
+            <button type="button" class="btn btn-outline-primary filter-btn" data-filter="shipped">Shipped</button>
+            <button type="button" class="btn btn-outline-success filter-btn" data-filter="delivered">Delivered</button>
+            <button type="button" class="btn btn-outline-danger filter-btn" data-filter="cancelled">Cancelled</button>
+        </div>
+    </div>
+</div>
+
+<!-- Order Export -->
+<div class="card shadow mt-4">
+    <div class="card-header py-3">
+        <h5 class="mb-0">Export Orders</h5>
+    </div>
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-5">
+                <label for="exportDateFrom" class="form-label">From Date</label>
+                <input type="date" class="form-control" id="exportDateFrom">
+            </div>
+            <div class="col-md-5">
+                <label for="exportDateTo" class="form-label">To Date</label>
+                <input type="date" class="form-control" id="exportDateTo">
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="button" class="btn btn-primary w-100" id="exportBtn">
+                    <i class="fas fa-download me-2"></i> Export
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Order search functionality
+        const orderSearch = document.getElementById('orderSearch');
+        const ordersTable = document.getElementById('ordersTable');
+        const tableRows = ordersTable.querySelectorAll('tbody tr');
+        
+        orderSearch.addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase();
+            
+            tableRows.forEach(row => {
+                const rowText = row.textContent.toLowerCase();
+                if (rowText.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+        
+        // Filter by status
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                const filter = this.dataset.filter;
+                
+                tableRows.forEach(row => {
+                    if (filter === 'all') {
+                        row.style.display = '';
+                    } else {
+                        const statusCell = row.querySelector('td:nth-child(5)');
+                        if (statusCell && statusCell.textContent.toLowerCase().includes(filter)) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+        
+        // Export functionality (demo only)
+        const exportBtn = document.getElementById('exportBtn');
+        
+        exportBtn.addEventListener('click', function() {
+            const fromDate = document.getElementById('exportDateFrom').value;
+            const toDate = document.getElementById('exportDateTo').value;
+            
+            if (!fromDate || !toDate) {
+                alert('Please select both from and to dates');
+                return;
+            }
+            
+            alert(`Orders would be exported for period: ${fromDate} to ${toDate}`);
+            // In a real app, this would trigger a download
+        });
+    });
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .btn-primary {
+        background-color: #4a6bef;
+        border-color: #4a6bef;
+    }
+    
+    .btn-primary:hover {
+        background-color: #3a59cb;
+        border-color: #3a59cb;
+    }
+    
+    .btn-outline-primary {
+        color: #4a6bef;
+        border-color: #4a6bef;
+    }
+    
+    .btn-outline-primary:hover {
+        background-color: #4a6bef;
+        border-color: #4a6bef;
+    }
+    
+    .page-item.active .page-link {
+        background-color: #4a6bef;
+        border-color: #4a6bef;
+    }
+</style>
+{% endblock %}

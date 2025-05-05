@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Confirmation - PayRing{% endblock %}
+
+{% block content %}
+<!-- Order Confirmation Section -->
+<section class="confirmation-section py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card border-0 shadow">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-5">
+                            <div class="confirmation-icon bg-success text-white rounded-circle mb-4 mx-auto">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <h1 class="h2 mb-3">Thank You for Your Order!</h1>
+                            <p class="lead">Your order has been received and is being processed.</p>
+                            <p>Order #{{ order.id }}</p>
+                        </div>
+                        
+                        <div class="order-details mb-5">
+                            <h2 class="h4 mb-4">Order Details</h2>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Details</th>
+                                            <th class="text-end">Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in order.order_items %}
+                                        <tr>
+                                            <td>{{ item.kit_type.name }} Kit</td>
+                                            <td>
+                                                Ring Type: {{ item.ring_type.name }}<br>
+                                                Ring Size: {{ item.ring_size.size }}<br>
+                                                Quantity: {{ item.quantity }}
+                                            </td>
+                                            <td class="text-end">${{ "%.2f"|format(item.price * item.quantity) }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                        <tr>
+                                            <td colspan="2" class="text-end">Subtotal:</td>
+                                            <td class="text-end">${{ "%.2f"|format(order.total_amount - 5.99) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-end">Shipping:</td>
+                                            <td class="text-end">$5.99</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-end fw-bold">Total:</td>
+                                            <td class="text-end fw-bold">${{ "%.2f"|format(order.total_amount) }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-5">
+                            <div class="col-md-6">
+                                <h3 class="h5 mb-3">Shipping Address</h3>
+                                <p>
+                                    {{ order.customer_name }}<br>
+                                    {{ order.shipping_address }}<br>
+                                    {{ order.customer_email }}<br>
+                                    {% if order.customer_phone %}
+                                    {{ order.customer_phone }}
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <h3 class="h5 mb-3">Shipping Method</h3>
+                                <p>Standard Shipping (3-5 business days)</p>
+                                
+                                <h3 class="h5 mb-3">Payment Method</h3>
+                                <p>Credit Card</p>
+                            </div>
+                        </div>
+                        
+                        <div class="next-steps">
+                            <h2 class="h4 mb-4">What's Next?</h2>
+                            <div class="row g-4">
+                                <div class="col-md-4">
+                                    <div class="step text-center">
+                                        <div class="step-number bg-primary text-white rounded-circle mb-3 mx-auto">1</div>
+                                        <h3 class="h5">Order Processing</h3>
+                                        <p class="text-muted">We're preparing your order for shipment. You'll receive an email when it ships.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="step text-center">
+                                        <div class="step-number bg-primary text-white rounded-circle mb-3 mx-auto">2</div>
+                                        <h3 class="h5">Shipping</h3>
+                                        <p class="text-muted">Your PayRing kit will be on its way to you soon. Expected delivery: 3-5 business days.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="step text-center">
+                                        <div class="step-number bg-primary text-white rounded-circle mb-3 mx-auto">3</div>
+                                        <h3 class="h5">Assembly & Enjoy</h3>
+                                        <p class="text-muted">Follow the included instructions to build your own PayRing and enjoy!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-5">
+                            <a href="{{ url_for('shop.shop_index') }}" class="btn btn-primary">Continue Shopping</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .confirmation-icon {
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+    }
+    
+    .step-number {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        font-weight: bold;
+    }
+    
+    .bg-primary {
+        background-color: #4a6bef !important;
+    }
+    
+    .btn-primary {
+        background-color: #4a6bef;
+        border-color: #4a6bef;
+    }
+    
+    .btn-primary:hover {
+        background-color: #3a59cb;
+        border-color: #3a59cb;
+    }
+</style>
+{% endblock %}

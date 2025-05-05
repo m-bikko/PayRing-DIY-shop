@@ -1,0 +1,365 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Order #{{ order.id }} - PayRing Admin{% endblock %}
+
+{% block header %}Order #{{ order.id }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <!-- Order Overview -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Order Details</h5>
+                <div>
+                    <a href="{{ url_for('admin.orders') }}" class="btn btn-sm btn-outline-secondary me-2">
+                        <i class="fas fa-arrow-left me-1"></i> Back to Orders
+                    </a>
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="printOrderBtn">
+                        <i class="fas fa-print me-1"></i> Print
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h5 class="text-muted mb-2">Order Information</h5>
+                        <p class="mb-1"><strong>Order ID:</strong> #{{ order.id }}</p>
+                        <p class="mb-1"><strong>Date Placed:</strong> {{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                        <p class="mb-0">
+                            <strong>Status:</strong>
+                            {% if order.status == 'pending' %}
+                            <span class="badge bg-warning">Pending</span>
+                            {% elif order.status == 'processing' %}
+                            <span class="badge bg-info">Processing</span>
+                            {% elif order.status == 'shipped' %}
+                            <span class="badge bg-primary">Shipped</span>
+                            {% elif order.status == 'delivered' %}
+                            <span class="badge bg-success">Delivered</span>
+                            {% elif order.status == 'cancelled' %}
+                            <span class="badge bg-danger">Cancelled</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="text-muted mb-2">Customer Information</h5>
+                        <p class="mb-1"><strong>Name:</strong> {{ order.customer_name }}</p>
+                        <p class="mb-1"><strong>Email:</strong> {{ order.customer_email }}</p>
+                        <p class="mb-0"><strong>Phone:</strong> {{ order.customer_phone or 'N/A' }}</p>
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h5 class="text-muted mb-2">Shipping Address</h5>
+                        <p class="mb-0">{{ order.shipping_address | replace(',', ',<br>') | safe }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="text-muted mb-2">Payment Information</h5>
+                        <p class="mb-1"><strong>Method:</strong> Credit Card</p>
+                        <p class="mb-0"><strong>Total:</strong> ${{ "%.2f"|format(order.total_amount) }}</p>
+                    </div>
+                </div>
+                
+                <h5 class="text-muted mb-3">Order Items</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Product</th>
+                                <th>Details</th>
+                                <th class="text-end">Price</th>
+                                <th class="text-center">Quantity</th>
+                                <th class="text-end">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in order.order_items %}
+                            <tr>
+                                <td>{{ item.kit_type.name }} Kit</td>
+                                <td>
+                                    Ring Type: {{ item.ring_type.name }}<br>
+                                    Ring Size: {{ item.ring_size.size }}
+                                </td>
+                                <td class="text-end">${{ "%.2f"|format(item.price) }}</td>
+                                <td class="text-center">{{ item.quantity }}</td>
+                                <td class="text-end">${{ "%.2f"|format(item.price * item.quantity) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4" class="text-end"><strong>Subtotal:</strong></td>
+                                <td class="text-end">${{ "%.2f"|format(order.total_amount - 5.99) }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="text-end"><strong>Shipping:</strong></td>
+                                <td class="text-end">$5.99</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="text-end"><strong>Total:</strong></td>
+                                <td class="text-end">${{ "%.2f"|format(order.total_amount) }}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- Order Actions -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h5 class="mb-0">Order Actions</h5>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('admin.update_order_status', order_id=order.id) }}" method="POST">
+                    <div class="mb-3">
+                        <label for="orderStatus" class="form-label">Update Status</label>
+                        <select class="form-select" id="orderStatus" name="status">
+                            <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Pending</option>
+                            <option value="processing" {% if order.status == 'processing' %}selected{% endif %}>Processing</option>
+                            <option value="shipped" {% if order.status == 'shipped' %}selected{% endif %}>Shipped</option>
+                            <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Delivered</option>
+                            <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Update Status</button>
+                    </div>
+                </form>
+                
+                <hr>
+                
+                <div class="d-grid gap-2">
+                    <button type="button" class="btn btn-outline-primary" id="emailCustomerBtn">
+                        <i class="fas fa-envelope me-1"></i> Email Customer
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" id="generateLabelBtn">
+                        <i class="fas fa-tag me-1"></i> Generate Shipping Label
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Order Timeline -->
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h5 class="mb-0">Order Timeline</h5>
+            </div>
+            <div class="card-body">
+                <ul class="timeline">
+                    <li class="timeline-item">
+                        <div class="timeline-marker bg-success"></div>
+                        <div class="timeline-content">
+                            <h3 class="timeline-title">Order Placed</h3>
+                            <p class="timeline-date">{{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                            <p>Order was created by customer.</p>
+                        </div>
+                    </li>
+                    
+                    {% if order.status != 'pending' %}
+                    <li class="timeline-item">
+                        <div class="timeline-marker bg-info"></div>
+                        <div class="timeline-content">
+                            <h3 class="timeline-title">Processing</h3>
+                            <p class="timeline-date">{{ (order.created_at + timedelta(hours=2)).strftime('%Y-%m-%d %H:%M') }}</p>
+                            <p>Order moved to processing.</p>
+                        </div>
+                    </li>
+                    {% endif %}
+                    
+                    {% if order.status == 'shipped' or order.status == 'delivered' %}
+                    <li class="timeline-item">
+                        <div class="timeline-marker bg-primary"></div>
+                        <div class="timeline-content">
+                            <h3 class="timeline-title">Shipped</h3>
+                            <p class="timeline-date">{{ (order.created_at + timedelta(days=1)).strftime('%Y-%m-%d %H:%M') }}</p>
+                            <p>Order has been shipped to customer.</p>
+                        </div>
+                    </li>
+                    {% endif %}
+                    
+                    {% if order.status == 'delivered' %}
+                    <li class="timeline-item">
+                        <div class="timeline-marker bg-success"></div>
+                        <div class="timeline-content">
+                            <h3 class="timeline-title">Delivered</h3>
+                            <p class="timeline-date">{{ (order.created_at + timedelta(days=4)).strftime('%Y-%m-%d %H:%M') }}</p>
+                            <p>Order was delivered to customer.</p>
+                        </div>
+                    </li>
+                    {% endif %}
+                    
+                    {% if order.status == 'cancelled' %}
+                    <li class="timeline-item">
+                        <div class="timeline-marker bg-danger"></div>
+                        <div class="timeline-content">
+                            <h3 class="timeline-title">Cancelled</h3>
+                            <p class="timeline-date">{{ (order.created_at + timedelta(hours=6)).strftime('%Y-%m-%d %H:%M') }}</p>
+                            <p>Order was cancelled.</p>
+                        </div>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Email Customer Modal -->
+<div class="modal fade" id="emailCustomerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Email Customer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="emailTo" class="form-label">To</label>
+                        <input type="email" class="form-control" id="emailTo" value="{{ order.customer_email }}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="emailSubject" class="form-label">Subject</label>
+                        <input type="text" class="form-control" id="emailSubject" value="Your PayRing Order #{{ order.id }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="emailMessage" class="form-label">Message</label>
+                        <textarea class="form-control" id="emailMessage" rows="5">Dear {{ order.customer_name }},
+
+Thank you for your order with PayRing. Your order #{{ order.id }} is now {{ order.status }}.
+
+If you have any questions, please don't hesitate to contact us.
+
+Best regards,
+PayRing Team</textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Send Email</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Email customer button
+        const emailCustomerBtn = document.getElementById('emailCustomerBtn');
+        
+        emailCustomerBtn.addEventListener('click', function() {
+            const emailCustomerModal = new bootstrap.Modal(document.getElementById('emailCustomerModal'));
+            emailCustomerModal.show();
+        });
+        
+        // Print order button
+        const printOrderBtn = document.getElementById('printOrderBtn');
+        
+        printOrderBtn.addEventListener('click', function() {
+            window.print();
+        });
+        
+        // Generate shipping label button (demo only)
+        const generateLabelBtn = document.getElementById('generateLabelBtn');
+        
+        generateLabelBtn.addEventListener('click', function() {
+            alert('Shipping label would be generated for this order');
+            // In a real app, this would generate and download a PDF
+        });
+    });
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Timeline styles */
+    .timeline {
+        position: relative;
+        padding-left: 1.5rem;
+        list-style: none;
+    }
+    
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 0.7rem;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background-color: #e0e0e0;
+    }
+    
+    .timeline-item {
+        position: relative;
+        padding-bottom: 1.5rem;
+    }
+    
+    .timeline-marker {
+        position: absolute;
+        left: -1.5rem;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        top: 0.25rem;
+    }
+    
+    .timeline-title {
+        font-size: 1rem;
+        font-weight: bold;
+        margin-bottom: 0.25rem;
+    }
+    
+    .timeline-date {
+        font-size: 0.875rem;
+        color: #6c757d;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Print styles */
+    @media print {
+        .col-lg-4,
+        .card-header,
+        nav,
+        footer,
+        .btn {
+            display: none !important;
+        }
+        
+        .col-lg-8 {
+            width: 100% !important;
+        }
+        
+        .card {
+            border: none !important;
+            box-shadow: none !important;
+        }
+    }
+    
+    .btn-primary {
+        background-color: #4a6bef;
+        border-color: #4a6bef;
+    }
+    
+    .btn-primary:hover {
+        background-color: #3a59cb;
+        border-color: #3a59cb;
+    }
+    
+    .btn-outline-primary {
+        color: #4a6bef;
+        border-color: #4a6bef;
+    }
+    
+    .btn-outline-primary:hover {
+        background-color: #4a6bef;
+        border-color: #4a6bef;
+    }
+</style>
+{% endblock %}
