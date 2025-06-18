@@ -20,20 +20,6 @@
                 <div class="product-image-container">
                     <img src="{{ kit.image_url or url_for('static', filename='images/kit-placeholder.jpg') }}" class="img-fluid rounded shadow product-image" alt="{{ kit.name }}">
                 </div>
-                <div class="row mt-3 g-2 product-thumbnails">
-                    <div class="col-3">
-                        <img src="{{ url_for('static', filename='images/kit-thumb-1.jpg') }}" class="img-fluid rounded thumbnail active" alt="{{ kit.name }} thumbnail 1">
-                    </div>
-                    <div class="col-3">
-                        <img src="{{ url_for('static', filename='images/kit-thumb-2.jpg') }}" class="img-fluid rounded thumbnail" alt="{{ kit.name }} thumbnail 2">
-                    </div>
-                    <div class="col-3">
-                        <img src="{{ url_for('static', filename='images/kit-thumb-3.jpg') }}" class="img-fluid rounded thumbnail" alt="{{ kit.name }} thumbnail 3">
-                    </div>
-                    <div class="col-3">
-                        <img src="{{ url_for('static', filename='images/kit-thumb-4.jpg') }}" class="img-fluid rounded thumbnail" alt="{{ kit.name }} thumbnail 4">
-                    </div>
-                </div>
             </div>
             
             <!-- Product Info -->
